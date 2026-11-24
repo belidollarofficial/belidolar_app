@@ -104,6 +104,7 @@
                         </div>
                     @endif
 
+                    @if ($service !== 'wd_akun_180')
                     <div>
                         <label class="block text-sm font-semibold text-white mb-1">
                             <i class="fas fa-dollar-sign text-[#4f46e5] mr-1"></i>
@@ -145,8 +146,9 @@
                             </div>
                         @endif
                     </div>
+                    @endif
 
-                    @if (in_array($service, ['invoice', 'pay_online'], true))
+                    @if ($service === 'pay_online')
                         <div>
                             <label class="block text-sm font-semibold text-white mb-1">
                                 <i class="fas fa-building-columns text-[#4f46e5] mr-1"></i> Bank Tujuan Transfer

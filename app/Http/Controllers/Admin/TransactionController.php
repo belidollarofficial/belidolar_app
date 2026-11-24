@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class TransactionController extends Controller
@@ -53,7 +54,7 @@ class TransactionController extends Controller
             'email' => ['nullable', 'string', 'email', 'max:255'],
             'account_type' => ['nullable', 'string', 'in:'.implode(',', array_keys(Transaction::ACCOUNT_TYPES))],
             'service' => ['required', 'string', 'in:'.implode(',', array_keys(Transaction::SERVICES))],
-            'amount' => ['required', 'numeric', 'min:1'],
+            'amount' => ['nullable', 'numeric', 'min:1'],
             'payable_amount' => ['nullable', 'numeric', 'min:0'],
             'fee_estimate' => ['nullable', 'string', 'max:50'],
             'payment_link' => ['nullable', 'string', 'url', 'max:500'],
@@ -67,6 +68,12 @@ class TransactionController extends Controller
             'proof' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
+        if ($data['service'] !== 'wd_akun_180' && ($data['amount'] ?? null) === null) {
+            throw ValidationException::withMessages([
+                'amount' => 'Nominal wajib diisi untuk layanan ini.',
+            ]);
+        }
+
         $phone = WhatsAppMessage::normalizePhone($data['customer_phone']);
 
         $transaction = Transaction::create([
@@ -76,7 +83,7 @@ class TransactionController extends Controller
             'email' => $data['email'] ?? null,
             'account_type' => $data['account_type'] ?? null,
             'service' => $data['service'],
-            'amount' => $data['amount'],
+            'amount' => $data['service'] === 'wd_akun_180' ? 0 : $data['amount'],
             'payable_amount' => $data['payable_amount'] ?? null,
             'fee_estimate' => $data['fee_estimate'] ?? null,
             'payment_link' => $data['payment_link'] ?? null,

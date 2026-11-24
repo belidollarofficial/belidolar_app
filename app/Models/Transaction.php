@@ -19,7 +19,13 @@ class Transaction extends Model
         'convert_usd' => 'Convert USD ke IDR',
         'invoice' => 'Bayar Invoice PayPal',
         'pay_online' => 'Jasa Bayar Online',
+        'wd_akun_180' => 'WD Akun Permanen 180 Hari',
     ];
+
+    /**
+     * Layanan yang tidak memakai nominal transaksi.
+     */
+    public const NO_AMOUNT_SERVICES = ['wd_akun_180'];
 
     /**
      * Opsi jenis akun untuk layanan Top Up Saldo PayPal.
@@ -92,6 +98,10 @@ class Transaction extends Model
 
     public function getAmountLabelAttribute(): string
     {
+        if (in_array($this->service, self::NO_AMOUNT_SERVICES, true)) {
+            return '-';
+        }
+
         return self::formatAmount((float) $this->amount, $this->service);
     }
 

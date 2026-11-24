@@ -171,6 +171,26 @@ class AdminTransactionTest extends TestCase
             ->assertSee('Top Up Saldo PayPal');
     }
 
+    public function test_admin_can_store_wd_transaction_without_amount(): void
+    {
+        $response = $this->actingAs($this->admin())->post('/admin/transactions', [
+            'customer_name' => 'WD Tanpa Nominal',
+            'customer_phone' => '081234567890',
+            'service' => 'wd_akun_180',
+            'status' => 'pending',
+            'notes' => 'Akun permanen 180 hari',
+        ]);
+
+        $transaction = Transaction::firstWhere('customer_name', 'WD Tanpa Nominal');
+        $this->assertNotNull($transaction);
+
+        $response->assertRedirect(route('admin.transactions.show', $transaction))
+            ->assertSessionHas('success');
+
+        $this->assertSame('0.00', $transaction->amount);
+        $this->assertSame('wd_akun_180', $transaction->service);
+    }
+
     public function test_admin_can_store_manual_transaction(): void
     {
         $response = $this->actingAs($this->admin())->post('/admin/transactions', [

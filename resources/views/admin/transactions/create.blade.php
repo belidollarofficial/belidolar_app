@@ -63,9 +63,9 @@
                         @endforeach
                     </select>
                 </div>
-                <div>
+                <div id="amountGroup">
                     <label class="block text-sm font-semibold text-white mb-1.5">Nominal (USD) <span class="text-red-400">*</span></label>
-                    <input type="number" step="0.01" min="1" name="amount" value="{{ old('amount') }}" class="form-input" placeholder="Contoh: 50" required />
+                    <input type="number" step="0.01" min="1" name="amount" id="amountInput" value="{{ old('amount') }}" class="form-input" placeholder="Contoh: 50" required />
                     <p class="text-xs text-[#94a3b8] mt-1">Nominal dalam USD (dolar).</p>
                 </div>
             </div>
@@ -160,6 +160,14 @@
             toggle('accountTypeGroup', service === 'topup');
             toggle('payoutAccountGroup', service === 'convert_usd');
             toggle('payOnlineGroup', service === 'pay_online');
+            toggle('amountGroup', service !== 'wd_akun_180');
+
+            var amount = document.getElementById('amountInput');
+            if (amount) {
+                var isWd = service === 'wd_akun_180';
+                amount.required = !isWd;
+                amount.disabled = isWd;
+            }
         }
         toggleServiceFields();
     </script>

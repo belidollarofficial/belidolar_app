@@ -165,6 +165,15 @@ class ContentDefaults
                     .'<li>Layanan tidak dapat digunakan untuk barang atau jasa yang melanggar hukum.</li>'
                     .'</ul>',
                 ],
+                ['wd_akun_180', 'Ketentuan WD Akun Permanen 180 Hari', 'wysiwyg',
+                    '<h3>Ketentuan WD Akun Permanen 180 Hari</h3>'
+                    .'<ul>'
+                    .'<li>Layanan WD berlaku untuk akun permanen dengan masa aktif 180 hari.</li>'
+                    .'<li>Pastikan nama lengkap dan nomor WhatsApp aktif agar admin dapat menghubungi Anda.</li>'
+                    .'<li>Admin akan melakukan verifikasi data sebelum proses WD dijalankan.</li>'
+                    .'<li>Proses dan nominal pencairan mengikuti hasil verifikasi serta kebijakan yang berlaku.</li>'
+                    .'</ul>',
+                ],
             ],
         ];
     }

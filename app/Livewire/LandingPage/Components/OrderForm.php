@@ -73,7 +73,7 @@ class OrderForm extends Component
             'paypalAccountName' => ['nullable', 'string', 'max:255'],
             'accountType' => ['nullable', 'string', Rule::in(array_keys(Transaction::ACCOUNT_TYPES))],
             'service' => ['required', 'string', 'in:'.implode(',', array_keys(Transaction::SERVICES))],
-            'amount' => ['required', 'numeric', 'min:1'],
+            'amount' => ['nullable', 'numeric', 'min:1'],
             'bankAccountId' => ['nullable', 'integer', 'exists:bank_accounts,id'],
             'payoutType' => ['nullable', 'string', Rule::in(array_keys(PayoutMethod::TYPES))],
             'payoutMethodId' => ['nullable'],
@@ -109,7 +109,7 @@ class OrderForm extends Component
      */
     private function serviceRequiresBankAccount(): bool
     {
-        return in_array($this->service, ['invoice', 'pay_online'], true);
+        return $this->service === 'pay_online';
     }
 
     /**
@@ -264,6 +264,10 @@ class OrderForm extends Component
             $rules['accountType'][] = 'required';
         }
 
+        if ($this->service !== 'wd_akun_180') {
+            $rules['amount'][] = 'required';
+        }
+
         if ($this->service === 'invoice') {
             $rules['paymentLink'][] = 'required';
         }
@@ -329,7 +333,7 @@ class OrderForm extends Component
             'paypal_account_name' => $keepsPaypalDetails ? ($data['paypalAccountName'] ?: null) : null,
             'account_type' => $this->service === 'topup' ? $data['accountType'] : null,
             'service' => $data['service'],
-            'amount' => $data['amount'],
+            'amount' => $this->service === 'wd_akun_180' ? 0 : ($data['amount'] ?? 0),
             'payable_amount' => $payable,
             'payment_link' => $data['paymentLink'] ?: null,
             'bank_name' => $bank?->bank_name,

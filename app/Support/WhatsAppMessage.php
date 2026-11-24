@@ -80,7 +80,9 @@ class WhatsAppMessage
             $lines[] = 'Jenis Akun: '.$accountType;
         }
 
-        $lines[] = 'Nominal: '.Transaction::formatAmount((float) ($data['amount'] ?? 0), $service);
+        if ($service !== 'wd_akun_180') {
+            $lines[] = 'Nominal: '.Transaction::formatAmount((float) ($data['amount'] ?? 0), $service);
+        }
 
         if (in_array($service, Transaction::PAYABLE_SERVICES, true) && ! empty($data['payable_amount'])) {
             $caption = $service === 'pay_online' ? 'Total Bayar' : 'Yang harus dibayar';
@@ -145,8 +147,11 @@ class WhatsAppMessage
             'Status transaksi kamu saat ini: *'.$transaction->statusLabel.'*.',
             'Kode Transaksi: '.$transaction->transaction_code,
             'Layanan: '.$transaction->serviceLabel,
-            'Nominal: '.Transaction::formatAmount((float) $transaction->amount, $transaction->service),
         ];
+
+        if (! in_array($transaction->service, Transaction::NO_AMOUNT_SERVICES, true)) {
+            $lines[] = 'Nominal: '.Transaction::formatAmount((float) $transaction->amount, $transaction->service);
+        }
 
         if ($transaction->hasPayableAmount()) {
             $lines[] = 'Yang harus dibayar: '.$transaction->payable_label;

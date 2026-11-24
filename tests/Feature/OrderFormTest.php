@@ -205,6 +205,7 @@ class OrderFormTest extends TestCase
             ]))
             ->assertDontSee('Nama Akun Paypal')
             ->assertDontSee('Email/Username Paypal')
+            ->assertDontSee('Bank Tujuan Transfer')
             ->call('submit')
             ->assertHasNoErrors();
 
@@ -212,10 +213,31 @@ class OrderFormTest extends TestCase
 
         $this->assertNull($transaction->email);
         $this->assertNull($transaction->paypal_account_name);
+        $this->assertNull($transaction->bank_name);
+        $this->assertNull($transaction->bank_account_number);
 
         $message = rawurldecode(explode('?text=', $component->get('successUrl'), 2)[1] ?? '');
         $this->assertStringNotContainsString('Email PayPal', $message);
         $this->assertStringNotContainsString('Nama Akun PayPal', $message);
+        $this->assertStringNotContainsString('Bank Tujuan', $message);
+    }
+
+    public function test_invoice_submits_without_bank_account(): void
+    {
+        Livewire::test(OrderForm::class)
+            ->set($this->validData([
+                'service' => 'invoice',
+                'bankAccountId' => null,
+                'paymentLink' => 'https://paypal.com/invoice/abc123',
+            ]))
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('transactions', [
+            'service' => 'invoice',
+            'bank_name' => null,
+            'bank_account_number' => null,
+        ]);
     }
 
     public function test_topup_overseas_stores_fee_estimate_and_shows_it_in_wa_message(): void
@@ -312,6 +334,34 @@ class OrderFormTest extends TestCase
             ->assertHasErrors(['merchantName', 'merchantUrl', 'paymentMethod']);
 
         $this->assertDatabaseCount('transactions', 0);
+    }
+
+    public function test_wd_permanent_order_only_requires_name_phone_and_notes(): void
+    {
+        $component = Livewire::test(OrderForm::class)
+            ->set([
+                'name' => 'Budi Santoso',
+                'phone' => '081290859343',
+                'service' => 'wd_akun_180',
+                'notes' => 'Akun permanen 180 hari',
+            ])
+            ->assertSee('Catatan (Opsional)')
+            ->assertDontSee('Email/Username Paypal')
+            ->assertDontSee('Bank Tujuan Transfer')
+            ->assertDontSee('Nominal')
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('transactions', [
+            'service' => 'wd_akun_180',
+            'amount' => 0,
+            'notes' => 'Akun permanen 180 hari',
+        ]);
+
+        $message = rawurldecode(explode('?text=', $component->get('successUrl'), 2)[1] ?? '');
+        $this->assertStringContainsString('WD Akun Permanen 180 Hari', $message);
+        $this->assertStringContainsString('Catatan: Akun permanen 180 hari', $message);
+        $this->assertStringNotContainsString('Nominal:', $message);
     }
 
     public function test_wa_message_format_differs_per_service(): void

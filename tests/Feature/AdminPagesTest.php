@@ -247,7 +247,9 @@ class AdminPagesTest extends TestCase
             ->assertSee('Ketentuan Top Up Saldo PayPal')
             ->call('syncService', 'invoice')
             ->assertSee('Ketentuan Bayar Invoice PayPal')
-            ->assertDontSee('Ketentuan Top Up Saldo PayPal');
+            ->assertDontSee('Ketentuan Top Up Saldo PayPal')
+            ->call('syncService', 'wd_akun_180')
+            ->assertSee('Ketentuan WD Akun Permanen 180 Hari');
     }
 
     public function test_admin_can_edit_service_specific_terms(): void

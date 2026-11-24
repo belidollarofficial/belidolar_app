@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/belidola/belidolar_app/
+    - export PUBLICPATH=/home/belidola/public_html/
+    - /bin/cp -R app bootstrap config database resources routes storage vendor artisan composer.json composer.lock $DEPLOYPATH
+    - /bin/cp -R public/. $PUBLICPATH

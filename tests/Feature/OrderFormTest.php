@@ -110,12 +110,11 @@ class OrderFormTest extends TestCase
         ]);
     }
 
-    public function test_order_form_shows_terms_for_selected_service(): void
+    public function test_order_form_dispatches_service_change_for_terms(): void
     {
         Livewire::test(OrderForm::class)
             ->set('service', 'convert_usd')
-            ->assertSee('Syarat &amp; Ketentuan Convert USD ke IDR', false)
-            ->assertSee('Ketentuan Convert USD ke IDR');
+            ->assertDispatched('order-service-changed', service: 'convert_usd');
     }
 
     public function test_topup_does_not_show_bank_account_field(): void

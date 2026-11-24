@@ -294,27 +294,6 @@
                         </div>
                     @endif
 
-                    @php
-                        $serviceTerms = \App\Support\SiteContent::rich(
-                            'syarat_ketentuan',
-                            $service,
-                            \App\Support\ContentDefaults::value('syarat_ketentuan', $service)
-                        );
-                    @endphp
-                    @if (trim(strip_tags($serviceTerms)) !== '')
-                        <div class="rounded-xl border border-[#334155] bg-[#0f1724] p-4">
-                            <details class="group">
-                                <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-white select-none [&::-webkit-details-marker]:hidden">
-                                    <span><i class="fas fa-file-contract text-[#22d3ee] mr-1"></i> Syarat &amp; Ketentuan {{ \App\Models\Transaction::SERVICES[$service] ?? '' }}</span>
-                                    <i class="fas fa-chevron-down text-[#22d3ee] text-xs transition-transform duration-300 group-open:rotate-180"></i>
-                                </summary>
-                                <div class="article-content mt-3 text-sm">
-                                    {!! $serviceTerms !!}
-                                </div>
-                            </details>
-                        </div>
-                    @endif
-
                     <button type="submit" wire:loading.attr="disabled" wire:target="submit"
                             class="w-full bg-[#25d366] hover:bg-[#1da851] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition">
                         <span wire:loading.remove wire:target="submit"><i class="fab fa-whatsapp"></i> Order via WhatsApp</span>

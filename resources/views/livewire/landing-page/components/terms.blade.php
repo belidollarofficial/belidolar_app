@@ -3,9 +3,9 @@
     <div class="max-w-4xl mx-auto">
         <div class="text-center mb-8">
             <h2 class="text-3xl font-extrabold text-white">{{ $title }}</h2>
-            <p class="text-gray-400 mt-2">Ketentuan penggunaan layanan {{ \App\Support\SiteContent::setting('general.site_name', 'Beli Dolar') }}.</p>
+            <p class="text-gray-400 mt-2">Ketentuan untuk layanan yang Anda pilih pada form order.</p>
         </div>
 
-        <x-terms-content />
+        <x-service-terms :service="$service" class="bg-[#1e293b] md:p-8" />
     </div>
 </section>

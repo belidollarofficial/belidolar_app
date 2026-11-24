@@ -211,6 +211,11 @@ class OrderForm extends Component
         $this->payoutMethodOther = '';
     }
 
+    public function updatedService(): void
+    {
+        $this->dispatch('order-service-changed', service: $this->service);
+    }
+
     public function updatedPayoutMethodId(): void
     {
         if ($this->payoutMethodId !== 'other') {

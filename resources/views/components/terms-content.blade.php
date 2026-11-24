@@ -19,24 +19,19 @@
         ->values();
 @endphp
 
-<div class="space-y-4">
+<div class="bg-[#1e293b] border border-[#334155] rounded-2xl p-6 md:p-8">
     @if (trim(strip_tags($generalTerms)) !== '')
-        <div class="bg-[#1e293b] border border-[#334155] rounded-2xl p-6 md:p-8">
-            <div class="article-content">
-                {!! $generalTerms !!}
-            </div>
+        <div class="article-content">
+            {!! $generalTerms !!}
         </div>
     @endif
 
     @foreach ($serviceTerms as $service)
-        <details class="group bg-[#1e293b] border border-[#334155] rounded-2xl overflow-hidden transition hover:border-[#4f46e5]/50">
-            <summary class="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-4 select-none [&::-webkit-details-marker]:hidden">
-                <span class="font-bold text-white">{{ $service['label'] }}</span>
-                <i class="fas fa-chevron-down text-[#22d3ee] text-sm transition-transform duration-300 group-open:rotate-180 shrink-0"></i>
-            </summary>
-            <div class="px-6 pb-6 pt-0 article-content">
+        <div class="mt-8 border-t border-[#334155] pt-6">
+            <h2 class="text-xl font-bold text-white mb-3">{{ $service['label'] }}</h2>
+            <div class="article-content text-sm">
                 {!! $service['html'] !!}
             </div>
-        </details>
+        </div>
     @endforeach
 </div>

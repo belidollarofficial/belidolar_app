@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Livewire\LandingPage\Components\Terms;
 use App\Models\Content;
 use App\Models\Setting;
 use App\Models\Transaction;
@@ -12,6 +13,7 @@ use Database\Seeders\ContentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class AdminPagesTest extends TestCase
@@ -236,9 +238,16 @@ class AdminPagesTest extends TestCase
             ->assertSee('data-target="3000000"', false)
             ->assertSee('2021')
             ->assertSee('Ketentuan Top Up Saldo PayPal')
-            ->assertSee('Ketentuan Convert USD ke IDR')
+            ->assertDontSee('Ketentuan Jasa Bayar Online');
+    }
+
+    public function test_terms_card_follows_selected_service(): void
+    {
+        Livewire::test(Terms::class)
+            ->assertSee('Ketentuan Top Up Saldo PayPal')
+            ->call('syncService', 'invoice')
             ->assertSee('Ketentuan Bayar Invoice PayPal')
-            ->assertSee('Ketentuan Jasa Bayar Online');
+            ->assertDontSee('Ketentuan Top Up Saldo PayPal');
     }
 
     public function test_admin_can_edit_service_specific_terms(): void
@@ -256,7 +265,11 @@ class AdminPagesTest extends TestCase
 
         SiteContent::flush();
 
-        $this->get('/')->assertSee('Invoice Khusus')->assertDontSee('alert(1)');
+        $this->get('/')->assertSee('Ketentuan Top Up Saldo PayPal');
+        Livewire::test(Terms::class)
+            ->call('syncService', 'invoice')
+            ->assertSee('Invoice Khusus')
+            ->assertDontSee('alert(1)');
         $this->get(route('legal.terms'))->assertOk()->assertSee('Invoice Khusus');
     }
 
@@ -361,7 +374,7 @@ class AdminPagesTest extends TestCase
 
         Content::query()
             ->where('section', 'syarat_ketentuan')
-            ->where('key', 'content')
+            ->where('key', 'topup')
             ->update([
                 'value' => '<h2>Ketentuan Uji</h2><p>Isi ketentuan.</p><script>alert(1)</script>',
             ]);
@@ -405,7 +418,7 @@ class AdminPagesTest extends TestCase
 
         SiteContent::flush();
 
-        $this->get('/')->assertSee('Poin Baru')->assertDontSee('alert(1)');
+        $this->get('/')->assertSee('Ketentuan Top Up Saldo PayPal')->assertDontSee('alert(1)');
         $this->get(route('legal.terms'))->assertOk()->assertSee('Poin Baru');
     }
 

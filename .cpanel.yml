@@ -1,7 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/belidola/belidolar_app/
     - export PUBLICPATH=/home/belidola/public_html/
-    - /bin/cp -R images $DEPLOYPATH
     - /bin/cp -R public/. $PUBLICPATH

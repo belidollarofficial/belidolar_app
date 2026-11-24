@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Beli Dolar">
+    <defs>
+        <linearGradient id="belidolar-gradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4f46e5" />
+            <stop offset="1" stop-color="#06b6d4" />
+        </linearGradient>
+    </defs>
+    <rect width="64" height="64" fill="url(#belidolar-gradient)" />
+    <path d="M32 9v6M32 49v6" fill="none" stroke="#ffffff" stroke-width="4.4" stroke-linecap="round" />
+    <path d="M43 22.5C43 17.9 38.2 15.2 32 15.2C25.8 15.2 21 17.9 21 22.3C21 26.7 25.4 28.5 32 30C38.6 31.5 43 33.4 43 37.8C43 42.2 38.2 44.8 32 44.8C25.8 44.8 21 42.1 21 37.5" fill="none" stroke="#ffffff" stroke-width="4.4" stroke-linecap="round" />
+</svg>

@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities'; */
+
+@layer base {
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    body {
+        @apply bg-base-100 text-base-content;
+    }
+}
+
+@layer components {
+    .gradient-text {
+        @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+    }
+    
+    .card-hover {
+        @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl;
+    }
+    
+    /* Toast */
+    #toast-container {
+        @apply fixed bottom-5 left-5 z-[9999] max-w-[380px] w-full;
+    }
+    
+    .toast-item {
+        @apply bg-base-200 border-l-4 border-success p-4 rounded-xl shadow-2xl mb-3;
+        animation: slideInLeft 0.5s ease;
+    }
+    .toast-item.warning { @apply border-warning; }
+    .toast-item.error { @apply border-error; }
+    .toast-item.info { @apply border-primary; }
+    
+    @keyframes slideInLeft {
+        from { transform: translateX(-100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    /* Hero Banner */
+    .hero-banner {
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #4f46e5 60%, #06b6d4 100%);
+        @apply relative overflow-hidden;
+    }
+    .hero-banner::before {
+        content: '';
+        @apply absolute -top-1/2 -right-10 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[60px];
+    }
+    .hero-banner::after {
+        content: '';
+        @apply absolute -bottom-1/2 -left-5 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[60px];
+    }
+    
+    /* Stats Banner */
+    .stats-banner {
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4f46e5 100%);
+        @apply relative overflow-hidden;
+    }
+    .stats-banner::before {
+        content: '';
+        @apply absolute -top-1/3 -right-10 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[60px];
+    }
+    .stats-banner::after {
+        content: '';
+        @apply absolute -bottom-1/3 -left-5 w-[300px] h-[300px] bg-accent/10 rounded-full blur-[60px];
+    }
+    
+    /* Navbar */
+    .nav-link {
+        @apply relative text-base-content/60 font-medium py-2 px-1 transition-all duration-300;
+    }
+    .nav-link::after {
+        content: '';
+        @apply absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-300;
+    }
+    .nav-link:hover {
+        @apply text-base-content;
+    }
+    .nav-link:hover::after {
+        @apply w-full;
+    }
+    .nav-link.active {
+        @apply text-base-content;
+    }
+    .nav-link.active::after {
+        @apply w-full;
+    }
+    
+    /* Mobile Menu */
+    .mobile-menu {
+        @apply fixed inset-0 top-16 bg-base-100/95 backdrop-blur-lg z-40 p-5 overflow-y-auto;
+        display: none;
+    }
+    .mobile-menu.active {
+        display: block;
+    }
+    .mobile-menu a {
+        @apply block px-4 py-3 text-base-content/60 font-medium rounded-xl transition-all duration-300;
+    }
+    .mobile-menu a:hover {
+        @apply bg-primary/20 text-base-content;
+    }
+    .mobile-menu a i {
+        @apply mr-3 w-5 text-center;
+    }
+    .mobile-menu a.active {
+        @apply bg-primary/15 text-base-content;
+    }
+    
+    .hamburger-btn {
+        @apply lg:hidden text-base-content text-2xl p-2 rounded-lg transition-all duration-300;
+    }
+    .hamburger-btn:hover {
+        @apply bg-base-300/30;
+    }
+    
+    /* Floating WhatsApp */
+    .floating-wa {
+        @apply fixed bottom-8 right-8 z-[9998] w-14 h-14 rounded-full bg-[#25d366] text-white flex items-center justify-center text-3xl shadow-lg border-none cursor-pointer transition-all duration-300;
+    }
+    .floating-wa:hover {
+        @apply scale-110 shadow-xl;
+    }
+    
+    /* WhatsApp Modal */
+    .modal-wa {
+        @apply fixed bottom-24 right-8 w-[380px] max-w-[90vw] bg-base-100 rounded-2xl shadow-2xl z-[9997] overflow-hidden;
+        display: none;
+    }
+    .modal-wa.active {
+        display: block;
+        animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    
+    /* Tab */
+    .tab-active {
+        @apply bg-gradient-to-r from-primary to-secondary text-white;
+    }
+    .tab-inactive {
+        @apply bg-base-300 text-base-content/60;
+    }
+}
+
+@layer utilities {
+    .scroll-mt-20 {
+        scroll-margin-top: 80px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .modal-wa {
+        @apply right-2.5 w-[calc(100%-20px)] bottom-[85px];
+    }
+    #toast-container {
+        @apply left-2.5 max-w-[calc(100%-20px)];
+    }
+}

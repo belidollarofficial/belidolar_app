@@ -148,23 +148,6 @@
                     </div>
                     @endif
 
-                    @if ($service === 'pay_online')
-                        <div>
-                            <label class="block text-sm font-semibold text-white mb-1">
-                                <i class="fas fa-building-columns text-[#4f46e5] mr-1"></i> Bank Tujuan Transfer
-                            </label>
-                            <select wire:model="bankAccountId"
-                                    class="w-full border border-[#334155] bg-[#0f1724] text-white rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#4f46e5] transition">
-                                <option value="">— Pilih Bank Tujuan —</option>
-                                @foreach ($this->bankAccounts as $account)
-                                    <option value="{{ $account->id }}">{{ $account->bank_name }} — {{ $account->account_number }} (a.n. {{ $account->account_name }})</option>
-                                @endforeach
-                            </select>
-                            <p class="text-xs text-gray-500 mt-1">Transfer akan dilakukan ke rekening ini.</p>
-                            @error('bankAccountId') <p class="text-xs text-red-400 mt-1">{{ $message }}</p> @enderror
-                        </div>
-                    @endif
-
                     @if ($service === 'convert_usd')
                         <div class="grid sm:grid-cols-2 gap-4">
                             <div>

@@ -237,19 +237,20 @@ class AdminPagesTest extends TestCase
             ->assertSee('data-target="36000"', false)
             ->assertSee('data-target="3000000"', false)
             ->assertSee('2021')
-            ->assertSee('Ketentuan Top Up Saldo PayPal')
+            ->assertSee('Nominal top up menggunakan USD')
+            ->assertDontSee('1. Penerimaan Syarat')
             ->assertDontSee('Ketentuan Jasa Bayar Online');
     }
 
     public function test_terms_card_follows_selected_service(): void
     {
         Livewire::test(Terms::class)
-            ->assertSee('Ketentuan Top Up Saldo PayPal')
+            ->assertSee('Nominal top up menggunakan USD')
             ->call('syncService', 'invoice')
-            ->assertSee('Ketentuan Bayar Invoice PayPal')
-            ->assertDontSee('Ketentuan Top Up Saldo PayPal')
+            ->assertSee('Link invoice wajib valid')
+            ->assertDontSee('Nominal top up menggunakan USD')
             ->call('syncService', 'wd_akun_180')
-            ->assertSee('Ketentuan WD Akun Permanen 180 Hari');
+            ->assertSee('Layanan WD berlaku');
     }
 
     public function test_admin_can_edit_service_specific_terms(): void
@@ -267,7 +268,7 @@ class AdminPagesTest extends TestCase
 
         SiteContent::flush();
 
-        $this->get('/')->assertSee('Ketentuan Top Up Saldo PayPal');
+        $this->get('/')->assertSee('Nominal top up menggunakan USD');
         Livewire::test(Terms::class)
             ->call('syncService', 'invoice')
             ->assertSee('Invoice Khusus')
@@ -370,6 +371,20 @@ class AdminPagesTest extends TestCase
         $this->assertSame('20', SiteContent::setting('fee.max'));
     }
 
+    public function test_terms_admin_editor_can_switch_transaction_type(): void
+    {
+        $this->seed(ContentSeeder::class);
+
+        $response = $this->actingAs($this->admin())->get('/admin/contents?terms_service=invoice');
+
+        $response->assertOk()
+            ->assertSee('Jenis Transaksi')
+            ->assertSee('Link invoice wajib valid');
+
+        $this->assertSame(1, substr_count($response->getContent(), 'contenteditable="true"'));
+        $this->assertStringContainsString('contents[syarat_ketentuan][invoice]', $response->getContent());
+    }
+
     public function test_landing_page_renders_editable_terms_and_conditions(): void
     {
         $this->seed(ContentSeeder::class);
@@ -396,23 +411,25 @@ class AdminPagesTest extends TestCase
         $this->seed(ContentSeeder::class);
         $admin = $this->admin();
 
-        $this->actingAs($admin)->get('/admin/contents')
-            ->assertStatus(200)
+        $response = $this->actingAs($admin)->get('/admin/contents');
+        $response->assertStatus(200)
+            ->assertSee('Jenis Transaksi')
             ->assertSee('Isi Syarat &amp; Ketentuan', false)
             ->assertSee('contenteditable="true"', false);
+
+        $this->assertSame(1, substr_count($response->getContent(), 'contenteditable="true"'));
 
         $this->actingAs($admin)->put(route('admin.contents.update'), [
             'contents' => [
                 'syarat_ketentuan' => [
-                    'title' => 'Syarat Baru',
-                    'content' => '<h2>Poin Baru</h2><p>Aman.</p><script>alert(1)</script>',
+                    'topup' => '<h2>Poin Baru</h2><p>Aman.</p><script>alert(1)</script>',
                 ],
             ],
         ])->assertSessionHas('success');
 
         $content = Content::query()
             ->where('section', 'syarat_ketentuan')
-            ->where('key', 'content')
+            ->where('key', 'topup')
             ->firstOrFail();
 
         $this->assertStringContainsString('Poin Baru', $content->value);
@@ -420,7 +437,7 @@ class AdminPagesTest extends TestCase
 
         SiteContent::flush();
 
-        $this->get('/')->assertSee('Ketentuan Top Up Saldo PayPal')->assertDontSee('alert(1)');
+        $this->get('/')->assertSee('Poin Baru')->assertDontSee('alert(1)');
         $this->get(route('legal.terms'))->assertOk()->assertSee('Poin Baru');
     }
 

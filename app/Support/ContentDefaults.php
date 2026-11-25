@@ -130,8 +130,7 @@ class ContentDefaults
                     .'<p>Kami dapat memperbarui syarat dan ketentuan ini sewaktu-waktu. Perubahan berlaku sejak dipublikasikan pada halaman ini. Penggunaan layanan setelah perubahan berarti Anda menyetujui ketentuan yang diperbarui.</p>',
                 ],
                 ['topup', 'Ketentuan Top Up Saldo PayPal', 'wysiwyg',
-                    '<h3>Ketentuan Top Up Saldo PayPal</h3>'
-                    .'<ul>'
+                    '<ul>'
                     .'<li>Nominal top up menggunakan USD dan dibayarkan dalam Rupiah sesuai rate yang berlaku.</li>'
                     .'<li>Email/username dan nama akun PayPal wajib benar dan aktif. Kesalahan data menjadi tanggung jawab pelanggan.</li>'
                     .'<li>Untuk akun luar negeri, estimasi fee $5-$15 akan diinformasikan sebelum pembayaran.</li>'
@@ -139,8 +138,7 @@ class ContentDefaults
                     .'</ul>',
                 ],
                 ['convert_usd', 'Ketentuan Convert USD ke IDR', 'wysiwyg',
-                    '<h3>Ketentuan Convert USD ke IDR</h3>'
-                    .'<ul>'
+                    '<ul>'
                     .'<li>Rate mengikuti bracket nominal yang berlaku dan dapat berubah sewaktu-waktu.</li>'
                     .'<li>Pastikan saldo PayPal mencukupi dan akun dalam kondisi aktif.</li>'
                     .'<li>Nomor rekening atau e-wallet tujuan wajib valid dan atas nama pelanggan.</li>'
@@ -148,8 +146,7 @@ class ContentDefaults
                     .'</ul>',
                 ],
                 ['invoice', 'Ketentuan Bayar Invoice PayPal', 'wysiwyg',
-                    '<h3>Ketentuan Bayar Invoice PayPal</h3>'
-                    .'<ul>'
+                    '<ul>'
                     .'<li>Link invoice wajib valid dan dapat diakses oleh admin.</li>'
                     .'<li>Nominal invoice dibayarkan dalam Rupiah sesuai rate yang berlaku.</li>'
                     .'<li>Pastikan invoice belum dibayar sebelum order dikirim.</li>'
@@ -157,8 +154,7 @@ class ContentDefaults
                     .'</ul>',
                 ],
                 ['pay_online', 'Ketentuan Jasa Bayar Online', 'wysiwyg',
-                    '<h3>Ketentuan Jasa Bayar Online</h3>'
-                    .'<ul>'
+                    '<ul>'
                     .'<li>Nama merchant dan URL situs wajib sesuai dengan transaksi yang diminta.</li>'
                     .'<li>Total bayar dihitung dari nominal pembelian dikalikan rate yang berlaku.</li>'
                     .'<li>Metode pembayaran mengikuti pilihan yang tersedia di situs merchant.</li>'
@@ -166,8 +162,7 @@ class ContentDefaults
                     .'</ul>',
                 ],
                 ['wd_akun_180', 'Ketentuan WD Akun Permanen 180 Hari', 'wysiwyg',
-                    '<h3>Ketentuan WD Akun Permanen 180 Hari</h3>'
-                    .'<ul>'
+                    '<ul>'
                     .'<li>Layanan WD berlaku untuk akun permanen dengan masa aktif 180 hari.</li>'
                     .'<li>Pastikan nama lengkap dan nomor WhatsApp aktif agar admin dapat menghubungi Anda.</li>'
                     .'<li>Admin akan melakukan verifikasi data sebelum proses WD dijalankan.</li>'

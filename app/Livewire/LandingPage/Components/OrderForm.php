@@ -104,15 +104,6 @@ class OrderForm extends Component
     }
 
     /**
-     * Hanya Bayar Invoice & Jasa Bayar Online yang membutuhkan rekening
-     * tujuan transfer. Top Up Saldo PayPal tidak lagi memilih rekening.
-     */
-    private function serviceRequiresBankAccount(): bool
-    {
-        return $this->service === 'pay_online';
-    }
-
-    /**
      * Rate yang tampil reaktif sesuai nominal + layanan yang dipilih.
      *
      * Convert USD ke IDR memakai rentang rate (per bracket nominal).
@@ -272,10 +263,6 @@ class OrderForm extends Component
             $rules['paymentLink'][] = 'required';
         }
 
-        if ($this->serviceRequiresBankAccount()) {
-            $rules['bankAccountId'][] = 'required';
-        }
-
         if ($this->service === 'convert_usd') {
             if ($this->payoutMethodId === 'other') {
                 $rules['payoutMethodOther'][] = 'required';
@@ -303,10 +290,6 @@ class OrderForm extends Component
             $rate = (float) SiteContent::setting('rate.topup', 18300);
             $payable = round($rate * (float) $data['amount'], 2);
         }
-
-        $bank = $this->serviceRequiresBankAccount() && $this->bankAccountId
-            ? BankAccount::find($this->bankAccountId)
-            : null;
 
         $payout = null;
         $payoutMethodName = null;
@@ -336,9 +319,6 @@ class OrderForm extends Component
             'amount' => $this->service === 'wd_akun_180' ? 0 : ($data['amount'] ?? 0),
             'payable_amount' => $payable,
             'payment_link' => $data['paymentLink'] ?: null,
-            'bank_name' => $bank?->bank_name,
-            'bank_account_name' => $bank?->account_name,
-            'bank_account_number' => $bank?->account_number,
             'payout_type' => $payoutType,
             'payout_method' => $payoutMethodName,
             'payout_account_number' => $this->service === 'convert_usd' ? ($data['payoutAccountNumber'] ?: null) : null,

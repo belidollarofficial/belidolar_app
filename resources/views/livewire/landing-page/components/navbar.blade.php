@@ -5,15 +5,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
-                <a href="{{ $home }}" class="flex items-center gap-3 hover:opacity-80 transition">
-                    <x-brand-mark class="w-10 h-10 rounded-xl" />
-                    <div>
-                        <span class="text-2xl font-extrabold tracking-tight">
-                            <span class="text-[#818cf8]">Beli</span>
-                            <span class="text-[#22d3ee]">Dolar</span>
-                        </span>
-                        <p class="text-[10px] text-gray-400 -mt-0.5">@setting('general.site_name') Terpercaya</p>
-                    </div>
+                <a href="{{ $home }}" class="flex items-center hover:opacity-80 transition">
+                    <x-brand-mark class="h-11 w-40 sm:h-12 sm:w-48 rounded-xl" />
                 </a>
 
                 <!-- Desktop Menu -->

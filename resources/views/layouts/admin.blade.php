@@ -294,14 +294,8 @@
 
         <!-- ===== SIDEBAR ===== -->
         <aside class="admin-sidebar fixed inset-y-0 left-0 z-40 lg:static lg:translate-x-0" id="adminSidebar">
-            <div class="h-[64px] flex items-center gap-3 px-5 border-b border-[#334155]">
-                <x-brand-mark class="w-9 h-9 rounded-xl" />
-                <div>
-                    <p class="font-extrabold leading-tight">
-                        <span class="text-[#818cf8]">Beli</span> <span class="text-[#22d3ee]">Dolar</span>
-                        <span class="text-xs text-[#94a3b8] font-medium">Admin</span>
-                    </p>
-                </div>
+            <div class="h-[64px] flex items-center px-5 border-b border-[#334155]">
+                <x-brand-mark class="h-10 w-44 rounded-xl" />
             </div>
 
             <nav class="p-4 space-y-1.5 overflow-y-auto" style="max-height: calc(100vh - 64px);">

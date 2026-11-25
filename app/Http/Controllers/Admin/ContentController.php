@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Content;
+use App\Models\Transaction;
 use App\Support\ContentDefaults;
 use App\Support\HtmlSanitizer;
 use App\Support\SiteContent;
@@ -13,14 +14,34 @@ use Illuminate\View\View;
 
 class ContentController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $sections = Content::query()
             ->orderBy('sort_order')
             ->get()
             ->groupBy('section');
 
-        return view('admin.contents', compact('sections'));
+        $termsServices = Transaction::SERVICES;
+        $termsService = (string) $request->query('terms_service', 'topup');
+
+        if (! array_key_exists($termsService, $termsServices)) {
+            $termsService = 'topup';
+        }
+
+        $termsContent = Content::query()
+            ->where('section', 'syarat_ketentuan')
+            ->where('key', $termsService)
+            ->first();
+
+        $termsDefault = ContentDefaults::value('syarat_ketentuan', $termsService);
+
+        return view('admin.contents', compact(
+            'sections',
+            'termsServices',
+            'termsService',
+            'termsContent',
+            'termsDefault',
+        ));
     }
 
     public function update(Request $request): RedirectResponse

@@ -306,6 +306,7 @@ class OrderFormTest extends TestCase
             ->assertSee('Link / URL Situs Belanja')
             ->assertSee('Metode Pembayaran')
             ->assertSee('Nominal Pembelian')
+            ->assertDontSee('Bank Tujuan Transfer')
             ->call('submit')
             ->assertHasNoErrors();
 
@@ -316,6 +317,8 @@ class OrderFormTest extends TestCase
             'merchant_name' => 'Amazon',
             'merchant_url' => 'https://www.amazon.com/checkout',
             'payment_method' => 'PayPal',
+            'bank_name' => null,
+            'bank_account_number' => null,
         ]);
 
         $message = rawurldecode(explode('?text=', $component->get('successUrl'), 2)[1] ?? '');

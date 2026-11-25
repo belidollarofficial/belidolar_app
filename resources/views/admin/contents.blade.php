@@ -32,63 +32,115 @@
                     </div>
                 </div>
 
-                <form id="content-form-{{ $section }}" method="POST" action="{{ route('admin.contents.update') }}">
-                    @csrf
-                    @method('PUT')
+                @if ($section === 'syarat_ketentuan')
+                    <form method="GET" action="{{ route('admin.contents.index') }}" class="mb-5">
+                        <label class="block text-sm font-semibold text-white mb-1.5">Jenis Transaksi</label>
+                        <select name="terms_service" class="form-select" onchange="this.form.submit()">
+                            @foreach ($termsServices as $value => $label)
+                                <option value="{{ $value }}" @selected($termsService === $value)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <p class="text-xs text-[#94a3b8] mt-1">Pilih jenis transaksi, lalu edit teks syarat & ketentuannya.</p>
+                    </form>
 
-                    <div class="grid sm:grid-cols-2 gap-4">
-                        @foreach ($items as $item)
-                            @php
-                                $defaultValue = \App\Support\ContentDefaults::value($item->section, $item->key);
-                            @endphp
-                            <div class="{{ in_array($item->type, ['textarea', 'wysiwyg'], true) ? 'sm:col-span-2' : '' }}">
-                                <div class="flex items-center justify-between gap-2 mb-1.5">
-                                    <label class="block text-sm font-semibold text-white">{{ $item->label }}</label>
-                                    @if ($defaultValue !== null)
-                                        <button type="submit" form="content-reset-{{ $item->id }}"
-                                            class="btn-reset"
-                                            title="Kembalikan ke nilai default"
-                                            @disabled($item->value === $defaultValue)
-                                            onclick="return confirm('Kembalikan kolom ini ke nilai default?')">
-                                            <i class="fas fa-rotate-left"></i> Reset
-                                        </button>
-                                    @endif
-                                </div>
-                                @if ($item->type === 'wysiwyg')
-                                    @include('admin.partials.rte', [
-                                        'name' => 'contents['.$section.']['.$item->key.']',
-                                        'value' => old('contents.'.$section.'.'.$item->key, $item->value),
-                                        'id' => 'rte-'.$section.'-'.$item->key,
-                                    ])
-                                    <p class="text-xs text-[#94a3b8] mt-1">Gunakan toolbar untuk memformat teks. HTML berbahaya dibersihkan otomatis saat disimpan.</p>
-                                @elseif ($item->type === 'textarea')
-                                    <textarea name="contents[{{ $section }}][{{ $item->key }}]" rows="3"
-                                        class="form-textarea">{{ old('contents.'.$section.'.'.$item->key, $item->value) }}</textarea>
-                                @elseif ($item->type === 'number')
-                                    <input type="number" step="any" name="contents[{{ $section }}][{{ $item->key }}]"
-                                        value="{{ old('contents.'.$section.'.'.$item->key, $item->value) }}" class="form-input" />
-                                @else
-                                    <input type="text" name="contents[{{ $section }}][{{ $item->key }}]"
-                                        value="{{ old('contents.'.$section.'.'.$item->key, $item->value) }}" class="form-input" />
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <div class="pt-4">
-                        <button type="submit" class="btn-primary inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold">
-                            <i class="fas fa-save"></i> Simpan {{ $sectionTitles[$section] ?? 'Section' }}
-                        </button>
-                    </div>
-                </form>
-
-                {{-- Form reset terpisah per item, dihubungkan lewat atribut form="" agar tidak bersarang. --}}
-                @foreach ($items as $item)
-                    <form id="content-reset-{{ $item->id }}" method="POST" action="{{ route('admin.contents.reset', $item) }}" class="hidden">
+                    <form id="content-form-syarat_ketentuan" method="POST" action="{{ route('admin.contents.update') }}">
                         @csrf
                         @method('PUT')
+
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                            <label class="block text-sm font-semibold text-white">
+                                Isi Syarat &amp; Ketentuan — {{ $termsServices[$termsService] }}
+                            </label>
+                            @if ($termsContent && $termsDefault !== null)
+                                <button type="submit" form="content-reset-{{ $termsContent->id }}"
+                                    class="btn-reset"
+                                    title="Kembalikan ke nilai default"
+                                    @disabled($termsContent->value === $termsDefault)
+                                    onclick="return confirm('Kembalikan teks ini ke nilai default?')">
+                                    <i class="fas fa-rotate-left"></i> Reset
+                                </button>
+                            @endif
+                        </div>
+
+                        @include('admin.partials.rte', [
+                            'name' => 'contents[syarat_ketentuan]['.$termsService.']',
+                            'value' => old('contents.syarat_ketentuan.'.$termsService, $termsContent?->value ?? $termsDefault),
+                            'id' => 'rte-syarat-'.$termsService,
+                        ])
+                        <p class="text-xs text-[#94a3b8] mt-1">Gunakan toolbar untuk memformat teks. HTML berbahaya dibersihkan otomatis saat disimpan.</p>
+
+                        <div class="pt-4">
+                            <button type="submit" class="btn-primary inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold">
+                                <i class="fas fa-save"></i> Simpan Syarat &amp; Ketentuan
+                            </button>
+                        </div>
                     </form>
-                @endforeach
+
+                    @if ($termsContent)
+                        <form id="content-reset-{{ $termsContent->id }}" method="POST" action="{{ route('admin.contents.reset', $termsContent) }}" class="hidden">
+                            @csrf
+                            @method('PUT')
+                        </form>
+                    @endif
+                @else
+                    <form id="content-form-{{ $section }}" method="POST" action="{{ route('admin.contents.update') }}">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            @foreach ($items as $item)
+                                @php
+                                    $defaultValue = \App\Support\ContentDefaults::value($item->section, $item->key);
+                                @endphp
+                                <div class="{{ in_array($item->type, ['textarea', 'wysiwyg'], true) ? 'sm:col-span-2' : '' }}">
+                                    <div class="flex items-center justify-between gap-2 mb-1.5">
+                                        <label class="block text-sm font-semibold text-white">{{ $item->label }}</label>
+                                        @if ($defaultValue !== null)
+                                            <button type="submit" form="content-reset-{{ $item->id }}"
+                                                class="btn-reset"
+                                                title="Kembalikan ke nilai default"
+                                                @disabled($item->value === $defaultValue)
+                                                onclick="return confirm('Kembalikan kolom ini ke nilai default?')">
+                                                <i class="fas fa-rotate-left"></i> Reset
+                                            </button>
+                                        @endif
+                                    </div>
+                                    @if ($item->type === 'wysiwyg')
+                                        @include('admin.partials.rte', [
+                                            'name' => 'contents['.$section.']['.$item->key.']',
+                                            'value' => old('contents.'.$section.'.'.$item->key, $item->value),
+                                            'id' => 'rte-'.$section.'-'.$item->key,
+                                        ])
+                                        <p class="text-xs text-[#94a3b8] mt-1">Gunakan toolbar untuk memformat teks. HTML berbahaya dibersihkan otomatis saat disimpan.</p>
+                                    @elseif ($item->type === 'textarea')
+                                        <textarea name="contents[{{ $section }}][{{ $item->key }}]" rows="3"
+                                            class="form-textarea">{{ old('contents.'.$section.'.'.$item->key, $item->value) }}</textarea>
+                                    @elseif ($item->type === 'number')
+                                        <input type="number" step="any" name="contents[{{ $section }}][{{ $item->key }}]"
+                                            value="{{ old('contents.'.$section.'.'.$item->key, $item->value) }}" class="form-input" />
+                                    @else
+                                        <input type="text" name="contents[{{ $section }}][{{ $item->key }}]"
+                                            value="{{ old('contents.'.$section.'.'.$item->key, $item->value) }}" class="form-input" />
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit" class="btn-primary inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold">
+                                <i class="fas fa-save"></i> Simpan {{ $sectionTitles[$section] ?? 'Section' }}
+                            </button>
+                        </div>
+                    </form>
+
+                    {{-- Form reset terpisah per item, dihubungkan lewat atribut form="" agar tidak bersarang. --}}
+                    @foreach ($items as $item)
+                        <form id="content-reset-{{ $item->id }}" method="POST" action="{{ route('admin.contents.reset', $item) }}" class="hidden">
+                            @csrf
+                            @method('PUT')
+                        </form>
+                    @endforeach
+                @endif
             </div>
         @endforeach
     </div>

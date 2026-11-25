@@ -33,55 +33,7 @@
                 </div>
 
                 @if ($section === 'syarat_ketentuan')
-                    <form method="GET" action="{{ route('admin.contents.index') }}" class="mb-5">
-                        <label class="block text-sm font-semibold text-white mb-1.5">Jenis Transaksi</label>
-                        <select name="terms_service" class="form-select" onchange="this.form.submit()">
-                            @foreach ($termsServices as $value => $label)
-                                <option value="{{ $value }}" @selected($termsService === $value)>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                        <p class="text-xs text-[#94a3b8] mt-1">Pilih jenis transaksi, lalu edit teks syarat & ketentuannya.</p>
-                    </form>
-
-                    <form id="content-form-syarat_ketentuan" method="POST" action="{{ route('admin.contents.update') }}">
-                        @csrf
-                        @method('PUT')
-
-                        <div class="flex items-center justify-between gap-2 mb-1.5">
-                            <label class="block text-sm font-semibold text-white">
-                                Isi Syarat &amp; Ketentuan — {{ $termsServices[$termsService] }}
-                            </label>
-                            @if ($termsContent && $termsDefault !== null)
-                                <button type="submit" form="content-reset-{{ $termsContent->id }}"
-                                    class="btn-reset"
-                                    title="Kembalikan ke nilai default"
-                                    @disabled($termsContent->value === $termsDefault)
-                                    onclick="return confirm('Kembalikan teks ini ke nilai default?')">
-                                    <i class="fas fa-rotate-left"></i> Reset
-                                </button>
-                            @endif
-                        </div>
-
-                        @include('admin.partials.rte', [
-                            'name' => 'contents[syarat_ketentuan]['.$termsService.']',
-                            'value' => old('contents.syarat_ketentuan.'.$termsService, $termsContent?->value ?? $termsDefault),
-                            'id' => 'rte-syarat-'.$termsService,
-                        ])
-                        <p class="text-xs text-[#94a3b8] mt-1">Gunakan toolbar untuk memformat teks. HTML berbahaya dibersihkan otomatis saat disimpan.</p>
-
-                        <div class="pt-4">
-                            <button type="submit" class="btn-primary inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold">
-                                <i class="fas fa-save"></i> Simpan Syarat &amp; Ketentuan
-                            </button>
-                        </div>
-                    </form>
-
-                    @if ($termsContent)
-                        <form id="content-reset-{{ $termsContent->id }}" method="POST" action="{{ route('admin.contents.reset', $termsContent) }}" class="hidden">
-                            @csrf
-                            @method('PUT')
-                        </form>
-                    @endif
+                    <livewire:admin.terms-content-editor />
                 @else
                     <form id="content-form-{{ $section }}" method="POST" action="{{ route('admin.contents.update') }}">
                         @csrf

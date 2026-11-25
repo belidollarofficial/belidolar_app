@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Livewire\Admin\TermsContentEditor;
 use App\Livewire\LandingPage\Components\Terms;
 use App\Models\Content;
 use App\Models\Setting;
@@ -277,6 +278,37 @@ class AdminPagesTest extends TestCase
         $this->get(route('legal.terms'))->assertOk()->assertSee('Invoice Khusus');
     }
 
+    public function test_terms_are_created_and_saved_if_service_content_row_is_missing(): void
+    {
+        $this->seed(ContentSeeder::class);
+        $admin = $this->admin();
+
+        Content::query()
+            ->where('section', 'syarat_ketentuan')
+            ->where('key', 'invoice')
+            ->delete();
+
+        $this->actingAs($admin)
+            ->get('/admin/contents?terms_service=invoice')
+            ->assertOk()
+            ->assertSee('Bayar Invoice PayPal')
+            ->assertSee('contenteditable="true"', false);
+
+        $this->actingAs($admin)->put(route('admin.contents.update'), [
+            'contents' => [
+                'syarat_ketentuan' => [
+                    'invoice' => '<p>Ketentuan invoice production.</p>',
+                ],
+            ],
+        ])->assertSessionHas('success');
+
+        $this->assertDatabaseHas('contents', [
+            'section' => 'syarat_ketentuan',
+            'key' => 'invoice',
+            'value' => '<p>Ketentuan invoice production.</p>',
+        ]);
+    }
+
     public function test_settings_page_shows_categories(): void
     {
         $this->seed(ContentSeeder::class);
@@ -376,15 +408,20 @@ class AdminPagesTest extends TestCase
     public function test_terms_admin_editor_can_switch_transaction_type(): void
     {
         $this->seed(ContentSeeder::class);
+        $admin = $this->admin();
 
-        $response = $this->actingAs($this->admin())->get('/admin/contents?terms_service=invoice');
+        $response = $this->actingAs($admin)->get('/admin/contents');
 
         $response->assertOk()
             ->assertSee('Jenis Transaksi')
-            ->assertSee('Link invoice wajib valid');
+            ->assertSee('Nominal top up menggunakan USD');
 
         $this->assertSame(1, substr_count($response->getContent(), 'contenteditable="true"'));
-        $this->assertStringContainsString('contents[syarat_ketentuan][invoice]', $response->getContent());
+
+        Livewire::test(TermsContentEditor::class)
+            ->set('service', 'invoice')
+            ->assertSet('service', 'invoice')
+            ->assertSee('Link invoice wajib valid');
     }
 
     public function test_landing_page_renders_editable_terms_and_conditions(): void
@@ -421,13 +458,12 @@ class AdminPagesTest extends TestCase
 
         $this->assertSame(1, substr_count($response->getContent(), 'contenteditable="true"'));
 
-        $this->actingAs($admin)->put(route('admin.contents.update'), [
-            'contents' => [
-                'syarat_ketentuan' => [
-                    'topup' => '<h2>Poin Baru</h2><p>Aman.</p><script>alert(1)</script>',
-                ],
-            ],
-        ])->assertSessionHas('success');
+        Livewire::actingAs($admin)
+            ->test(TermsContentEditor::class)
+            ->set('content', '<h2>Poin Baru</h2><p>Aman.</p><script>alert(1)</script>')
+            ->call('save')
+            ->assertHasNoErrors()
+            ->assertDispatched('toast');
 
         $content = Content::query()
             ->where('section', 'syarat_ketentuan')

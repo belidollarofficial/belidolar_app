@@ -42,6 +42,10 @@ class ContentSeeder extends Seeder
                 ['min', 'Estimasi Fee Minimum (USD)', 'number', '5'],
                 ['max', 'Estimasi Fee Maksimum (USD)', 'number', '15'],
             ],
+            'admin_fee' => [
+                ['threshold', 'Batas Nominal Bebas Biaya Admin (USD)', 'number', '50'],
+                ['amount', 'Biaya Admin di Bawah Batas (Rp)', 'number', '15000'],
+            ],
             'branding' => [
                 ['logo', 'Logo Website (PNG/SVG/WebP)', 'image', ''],
                 ['favicon', 'Favicon (PNG/SVG/ICO)', 'image', ''],

@@ -49,7 +49,7 @@ class WhatsAppMessage
     /**
      * Format pesan order sesuai jenis layanan yang dipilih pelanggan.
      *
-     * @param  array{code?: string, name?: string, phone?: string, email?: ?string, paypal_account_name?: ?string, account_type?: ?string, service?: string, amount?: float|string|int|null, payable_amount?: float|string|int|null, payment_link?: ?string, bank_name?: ?string, bank_account_name?: ?string, bank_account_number?: ?string, payout_type?: ?string, payout_method?: ?string, payout_account_number?: ?string, merchant_name?: ?string, merchant_url?: ?string, payment_method?: ?string, fee_estimate?: ?string, notes?: ?string}  $data
+     * @param  array{code?: string, name?: string, phone?: string, email?: ?string, paypal_account_name?: ?string, account_type?: ?string, service?: string, amount?: float|string|int|null, payable_amount?: float|string|int|null, admin_fee?: float|string|int|null, payment_link?: ?string, bank_name?: ?string, bank_account_name?: ?string, bank_account_number?: ?string, payout_type?: ?string, payout_method?: ?string, payout_account_number?: ?string, merchant_name?: ?string, merchant_url?: ?string, payment_method?: ?string, fee_estimate?: ?string, notes?: ?string}  $data
      */
     public static function forOrder(array $data): string
     {
@@ -87,6 +87,17 @@ class WhatsAppMessage
         if (in_array($service, Transaction::PAYABLE_SERVICES, true) && ! empty($data['payable_amount'])) {
             $caption = $service === 'pay_online' ? 'Total Bayar' : 'Yang harus dibayar';
             $lines[] = $caption.': Rp '.number_format((float) $data['payable_amount'], 0, ',', '.');
+        }
+
+        if (
+            in_array($service, Transaction::PAYABLE_SERVICES, true)
+            && array_key_exists('admin_fee', $data)
+            && $data['admin_fee'] !== null
+        ) {
+            $adminFee = (float) $data['admin_fee'];
+            $lines[] = 'Biaya Admin: '.($adminFee > 0
+                ? 'Rp '.number_format($adminFee, 0, ',', '.')
+                : 'Gratis');
         }
 
         if ($service === 'topup' && ($data['account_type'] ?? null) === 'luar_negeri' && ! empty($data['fee_estimate'])) {

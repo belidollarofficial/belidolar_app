@@ -367,6 +367,111 @@ class OrderFormTest extends TestCase
         $this->assertStringNotContainsString('Nominal:', $message);
     }
 
+    public function test_admin_fee_is_charged_below_threshold_for_payable_services(): void
+    {
+        $component = Livewire::test(OrderForm::class)
+            ->set($this->validData(['amount' => 10]))
+            ->assertSee('Biaya Admin')
+            ->assertSee('Rp 15.000')
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('transactions', [
+            'service' => 'topup',
+            'amount' => 10,
+            'payable_amount' => 198000,
+            'admin_fee' => 15000,
+        ]);
+
+        $message = rawurldecode(explode('?text=', $component->get('successUrl'), 2)[1] ?? '');
+        $this->assertStringContainsString('Yang harus dibayar: Rp 198.000', $message);
+        $this->assertStringContainsString('Biaya Admin: Rp 15.000', $message);
+    }
+
+    public function test_admin_fee_is_free_at_or_above_threshold(): void
+    {
+        $component = Livewire::test(OrderForm::class)
+            ->set($this->validData(['amount' => 50]))
+            ->assertSee('Gratis')
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('transactions', [
+            'service' => 'topup',
+            'amount' => 50,
+            'payable_amount' => 915000,
+            'admin_fee' => 0,
+        ]);
+
+        $message = rawurldecode(explode('?text=', $component->get('successUrl'), 2)[1] ?? '');
+        $this->assertStringContainsString('Biaya Admin: Gratis', $message);
+    }
+
+    public function test_admin_fee_applies_to_invoice_and_pay_online(): void
+    {
+        Livewire::test(OrderForm::class)
+            ->set($this->validData([
+                'service' => 'invoice',
+                'amount' => 25,
+                'paymentLink' => 'https://paypal.com/invoice/abc123',
+            ]))
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('transactions', [
+            'service' => 'invoice',
+            'amount' => 25,
+            'admin_fee' => 15000,
+            'payable_amount' => 472500,
+        ]);
+
+        Livewire::test(OrderForm::class)
+            ->set($this->validData([
+                'service' => 'pay_online',
+                'amount' => 10,
+                'merchantName' => 'Amazon',
+                'merchantUrl' => 'https://www.amazon.com/checkout',
+                'paymentMethod' => 'PayPal',
+            ]))
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('transactions', [
+            'service' => 'pay_online',
+            'amount' => 10,
+            'admin_fee' => 15000,
+            'payable_amount' => 198000,
+        ]);
+    }
+
+    public function test_admin_fee_settings_are_adjustable(): void
+    {
+        Setting::updateOrCreate(
+            ['category' => 'admin_fee', 'key' => 'threshold'],
+            ['label' => 'Batas Bebas Biaya Admin', 'type' => 'number', 'value' => '100'],
+        );
+
+        Setting::updateOrCreate(
+            ['category' => 'admin_fee', 'key' => 'amount'],
+            ['label' => 'Biaya Admin', 'type' => 'number', 'value' => '25000'],
+        );
+
+        SiteContent::flush();
+
+        Livewire::test(OrderForm::class)
+            ->set($this->validData(['amount' => 60]))
+            ->assertSee('Rp 25.000')
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('transactions', [
+            'service' => 'topup',
+            'amount' => 60,
+            'admin_fee' => 25000,
+            'payable_amount' => 1123000,
+        ]);
+    }
+
     public function test_wa_message_format_differs_per_service(): void
     {
         $submit = fn (array $overrides) => Livewire::test(OrderForm::class)

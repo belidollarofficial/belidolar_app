@@ -53,6 +53,8 @@ class ContentDefaults
                 ['item_3_desc', 'Item 3 - Deskripsi', 'text', 'Pembayaran invoice PayPal'],
                 ['item_4_title', 'Item 4 - Judul', 'text', 'Jasa Bayar Online'],
                 ['item_4_desc', 'Item 4 - Deskripsi', 'text', 'Bayar belanjaan di situs luar negeri'],
+                ['item_5_title', 'Item 5 - Judul', 'text', 'WD Akun Permanen 180 Hari'],
+                ['item_5_desc', 'Item 5 - Deskripsi', 'text', 'Pencairan akun permanen 180 hari'],
             ],
             'cara_order' => [
                 ['title', 'Judul', 'text', 'Cara'],

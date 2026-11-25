@@ -81,6 +81,7 @@ class Transaction extends Model
     protected $casts = [
         'amount' => 'decimal:2',
         'payable_amount' => 'decimal:2',
+        'admin_fee' => 'decimal:2',
         'notified_at' => 'datetime',
     ];
 
@@ -218,6 +219,7 @@ class Transaction extends Model
                 'service' => $this->service,
                 'amount' => $this->amount,
                 'payable_amount' => $this->payable_amount,
+                'admin_fee' => $this->admin_fee,
                 'payment_link' => $this->payment_link,
                 'bank_name' => $this->bank_name,
                 'bank_account_name' => $this->bank_account_name,

@@ -110,7 +110,7 @@
                 </h2>
                 <p class="text-gray-400 mt-2">@content('layanan', 'subtitle')</p>
             </div>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <div class="bg-[#1e293b] rounded-2xl card-shadow p-6 text-center hover:shadow-xl transition-all hover:-translate-y-1">
                     <div class="w-16 h-16 rounded-2xl bg-[#4f46e5]/10 flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-arrow-up text-2xl text-[#4f46e5]"></i>
@@ -138,6 +138,13 @@
                     </div>
                     <h4 class="font-bold text-white">{{ \App\Support\SiteContent::get('layanan', 'item_4_title', 'Jasa Bayar Online') }}</h4>
                     <p class="text-xs text-gray-400 mt-1">{{ \App\Support\SiteContent::get('layanan', 'item_4_desc', 'Bayar belanjaan di situs luar negeri') }}</p>
+                </div>
+                <div class="bg-[#1e293b] rounded-2xl card-shadow p-6 text-center hover:shadow-xl transition-all hover:-translate-y-1">
+                    <div class="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-clock text-2xl text-rose-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white">{{ \App\Support\SiteContent::get('layanan', 'item_5_title', 'WD Akun Permanen 180 Hari') }}</h4>
+                    <p class="text-xs text-gray-400 mt-1">{{ \App\Support\SiteContent::get('layanan', 'item_5_desc', 'Pencairan akun permanen 180 hari') }}</p>
                 </div>
             </div>
         </section>

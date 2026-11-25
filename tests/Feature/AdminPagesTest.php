@@ -237,6 +237,7 @@ class AdminPagesTest extends TestCase
             ->assertSee('data-target="36000"', false)
             ->assertSee('data-target="3000000"', false)
             ->assertSee('2021')
+            ->assertSee('Pencairan akun permanen 180 hari')
             ->assertSee('Nominal top up menggunakan USD')
             ->assertDontSee('1. Penerimaan Syarat')
             ->assertDontSee('Ketentuan Jasa Bayar Online');
@@ -285,6 +286,7 @@ class AdminPagesTest extends TestCase
             ->assertSee('Informasi Umum')
             ->assertSee('Logo & Favicon')
             ->assertSee('Estimasi Fee Top Up')
+            ->assertSee('Biaya Admin')
             ->assertDontSee('Kurs Hari Ini');
     }
 

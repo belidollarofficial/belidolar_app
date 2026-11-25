@@ -85,6 +85,18 @@
                         <dd class="text-white font-bold">{{ $transaction->payable_label }}</dd>
                     </div>
                 @endif
+                @if ($transaction->admin_fee !== null)
+                    <div>
+                        <dt class="text-[#94a3b8] text-xs uppercase tracking-wide">Biaya Admin</dt>
+                        <dd class="text-white font-semibold">
+                            @if ((float) $transaction->admin_fee > 0)
+                                Rp {{ number_format((float) $transaction->admin_fee, 0, ',', '.') }}
+                            @else
+                                Gratis
+                            @endif
+                        </dd>
+                    </div>
+                @endif
                 @if ($transaction->bank_name)
                     <div>
                         <dt class="text-[#94a3b8] text-xs uppercase tracking-wide">Bank Tujuan</dt>

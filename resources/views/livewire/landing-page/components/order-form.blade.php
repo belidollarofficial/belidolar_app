@@ -133,6 +133,17 @@
                                     <div class="mt-1">
                                         {{ $service === 'pay_online' ? 'Total Bayar' : 'Yang harus dibayar' }}: <strong class="text-cyan-100">Rp {{ number_format($this->rateInfo['estimated'], 0, ',', '.') }}</strong>
                                     </div>
+                                    <div class="mt-1">
+                                        Biaya Admin:
+                                        @if ($this->rateInfo['admin_fee'] > 0)
+                                            <strong class="text-amber-100">Rp {{ number_format($this->rateInfo['admin_fee'], 0, ',', '.') }}</strong>
+                                        @else
+                                            <strong class="text-emerald-200">Gratis</strong>
+                                        @endif
+                                    </div>
+                                    <div class="text-xs text-cyan-300/70 mt-1">
+                                        Bebas biaya admin untuk nominal ≥ ${{ number_format($this->rateInfo['admin_fee_threshold'], 0, ',', '.') }}
+                                    </div>
                                     @if ($service === 'topup' && $accountType === 'luar_negeri' && $this->feeEstimate)
                                         <div class="mt-1 text-amber-200">
                                             Estimasi Fee : <strong class="text-amber-100">{{ $this->feeEstimate }}</strong>

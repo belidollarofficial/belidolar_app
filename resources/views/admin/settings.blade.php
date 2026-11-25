@@ -25,6 +25,7 @@
                 'rate' => 'Rate Layanan',
                 'operasional' => 'Jam Operasional',
                 'fee' => 'Estimasi Fee Top Up',
+                'admin_fee' => 'Biaya Admin',
             ];
         @endphp
 

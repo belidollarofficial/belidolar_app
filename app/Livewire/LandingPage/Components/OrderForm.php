@@ -104,6 +104,24 @@ class OrderForm extends Component
     }
 
     /**
+     * Biaya admin Rupiah untuk nominal di bawah batas yang diatur admin.
+     */
+    private function adminFeeFor(float $amount): float
+    {
+        if (! $this->serviceUsesTopupRate()) {
+            return 0.0;
+        }
+
+        $threshold = (float) SiteContent::setting('admin_fee.threshold', 50);
+
+        if ($amount >= $threshold) {
+            return 0.0;
+        }
+
+        return (float) SiteContent::setting('admin_fee.amount', 15000);
+    }
+
+    /**
      * Rate yang tampil reaktif sesuai nominal + layanan yang dipilih.
      *
      * Convert USD ke IDR memakai rentang rate (per bracket nominal).
@@ -137,11 +155,14 @@ class OrderForm extends Component
 
         if ($this->serviceUsesTopupRate()) {
             $rate = (float) SiteContent::setting('rate.topup', 18300);
+            $adminFee = $this->adminFeeFor($amount);
 
             return [
                 'type' => 'single',
                 'rate' => $rate,
-                'estimated' => $rate * $amount,
+                'estimated' => ($rate * $amount) + $adminFee,
+                'admin_fee' => $adminFee,
+                'admin_fee_threshold' => (float) SiteContent::setting('admin_fee.threshold', 50),
             ];
         }
 
@@ -286,9 +307,12 @@ class OrderForm extends Component
         $customerPhone = WhatsAppMessage::normalizePhone($data['phone']);
 
         $payable = null;
+        $adminFee = 0;
+
         if ($this->serviceUsesTopupRate()) {
             $rate = (float) SiteContent::setting('rate.topup', 18300);
-            $payable = round($rate * (float) $data['amount'], 2);
+            $adminFee = $this->adminFeeFor((float) $data['amount']);
+            $payable = round(($rate * (float) $data['amount']) + $adminFee, 2);
         }
 
         $payout = null;
@@ -318,6 +342,7 @@ class OrderForm extends Component
             'service' => $data['service'],
             'amount' => $this->service === 'wd_akun_180' ? 0 : ($data['amount'] ?? 0),
             'payable_amount' => $payable,
+            'admin_fee' => $this->serviceUsesTopupRate() ? $adminFee : null,
             'payment_link' => $data['paymentLink'] ?: null,
             'payout_type' => $payoutType,
             'payout_method' => $payoutMethodName,

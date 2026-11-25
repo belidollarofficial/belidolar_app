@@ -320,7 +320,7 @@
                     <i class="fas fa-layer-group"></i> Rate Range
                 </a>
                 <a href="{{ route('admin.bank-accounts.index') }}" class="nav-item {{ request()->routeIs('admin.bank-accounts.*') ? 'active' : '' }}">
-                    <i class="fas fa-building-columns"></i> Rekening Bank
+                    <i class="fas fa-university"></i> Rekening Bank
                 </a>
                 <a href="{{ route('admin.payout-methods.index') }}" class="nav-item {{ request()->routeIs('admin.payout-methods.*') ? 'active' : '' }}">
                     <i class="fas fa-wallet"></i> Metode Pencairan

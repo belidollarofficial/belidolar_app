@@ -4,19 +4,34 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
             <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-8">
                 <div>
-                    <div class="flex items-center gap-2 mb-3">
-                        <x-brand-mark class="w-10 h-10 rounded-xl" />
-                        <span class="text-xl font-extrabold">
-                            <span class="text-[#818cf8]">Beli</span>
-                            <span class="text-[#22d3ee]">Dolar</span>
-                        </span>
+                    <div class="flex items-center mb-3">
+                        <x-brand-mark class="h-12 w-48 rounded-xl" />
                     </div>
                     <p class="text-sm text-gray-400">@content('footer', 'description')</p>
+                    @php
+                        $socialLinks = [
+                            ['key' => 'social_facebook_url', 'icon' => 'fab fa-facebook', 'label' => 'Facebook'],
+                            ['key' => 'social_instagram_url', 'icon' => 'fab fa-instagram', 'label' => 'Instagram'],
+                            ['key' => 'social_twitter_url', 'icon' => 'fab fa-twitter', 'label' => 'X / Twitter'],
+                            ['key' => 'social_youtube_url', 'icon' => 'fab fa-youtube', 'label' => 'YouTube'],
+                        ];
+                    @endphp
                     <div class="flex gap-3 mt-3">
-                        <a href="#" class="text-gray-400 hover:text-[#4f46e5] transition"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-[#4f46e5] transition"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-[#4f46e5] transition"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-[#4f46e5] transition"><i class="fab fa-youtube"></i></a>
+                        @foreach ($socialLinks as $social)
+                            @php
+                                $socialUrl = trim((string) \App\Support\SiteContent::get('footer', $social['key'], ''));
+                                $socialScheme = strtolower((string) parse_url($socialUrl, PHP_URL_SCHEME));
+                                $isValidSocialUrl = filter_var($socialUrl, FILTER_VALIDATE_URL)
+                                    && in_array($socialScheme, ['http', 'https'], true);
+                            @endphp
+                            @if ($isValidSocialUrl)
+                                <a href="{{ $socialUrl }}" target="_blank" rel="noopener noreferrer"
+                                    aria-label="{{ $social['label'] }}"
+                                    class="text-gray-400 hover:text-[#4f46e5] transition">
+                                    <i class="{{ $social['icon'] }}"></i>
+                                </a>
+                            @endif
+                        @endforeach
                     </div>
                 </div>
 
@@ -27,6 +42,7 @@
                         <li><a href="{{ route('beranda') }}?service=convert_usd#form-order" class="hover:text-[#4f46e5] transition">@content('footer', 'layanan_link_2')</a></li>
                         <li><a href="{{ route('beranda') }}?service=invoice#form-order" class="hover:text-[#4f46e5] transition">@content('footer', 'layanan_link_3')</a></li>
                         <li><a href="{{ route('beranda') }}?service=pay_online#form-order" class="hover:text-[#4f46e5] transition">{{ \App\Support\SiteContent::get('footer', 'layanan_link_4', 'Jasa Bayar Online') }}</a></li>
+                        <li><a href="{{ route('beranda') }}?service=wd_akun_180#form-order" class="hover:text-[#4f46e5] transition">{{ \App\Support\SiteContent::get('footer', 'layanan_link_5', 'WD Akun Permanen 180 Hari') }}</a></li>
                     </ul>
                 </div>
 

@@ -5,11 +5,13 @@ namespace Tests\Feature;
 use App\Livewire\LandingPage\Components\OrderForm;
 use App\Livewire\LandingPage\Components\TestimonialForm;
 use App\Livewire\LandingPage\Components\TransactionTracking;
+use App\Models\Content;
 use App\Models\Testimonial;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Support\SiteContent;
 use Database\Seeders\AdminSeeder;
+use Database\Seeders\ContentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
@@ -59,12 +61,24 @@ class ProductionReadinessTest extends TestCase
 
     public function test_footer_links_to_legal_pages(): void
     {
+        $this->seed(ContentSeeder::class);
+
+        Content::query()->updateOrCreate(
+            ['section' => 'footer', 'key' => 'social_facebook_url'],
+            ['label' => 'URL Profil Facebook', 'type' => 'text', 'value' => 'https://facebook.com/belidolar'],
+        );
+        SiteContent::flush();
+
         $this->get('/')
             ->assertOk()
             ->assertSee(route('legal.about'))
             ->assertSee(route('legal.terms'))
             ->assertSee(route('legal.privacy'))
-            ->assertSee(route('legal.how-to-order'));
+            ->assertSee(route('legal.how-to-order'))
+            ->assertSee(route('beranda').'?service=wd_akun_180#form-order')
+            ->assertSee('href="https://facebook.com/belidolar"', false)
+            ->assertSee('aria-label="Facebook"', false)
+            ->assertDontSee('href="#"', false);
     }
 
     public function test_order_form_service_can_be_preselected_from_query_string(): void

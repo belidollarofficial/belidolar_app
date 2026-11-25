@@ -149,12 +149,20 @@ class BlogAndFaqTest extends TestCase
             'sort_order' => 2,
         ]);
 
-        $this->get('/')
+        $response = $this->get('/')
             ->assertOk()
             ->assertSee('<details', false)
             ->assertSee('Berapa lama proses top up?')
             ->assertSee('Sekitar 20 menit.')
             ->assertDontSee('Pertanyaan nonaktif?');
+
+        $html = $response->getContent();
+        $termsPosition = strpos($html, 'id="syarat-ketentuan"');
+        $faqPosition = strpos($html, 'id="faq"');
+
+        $this->assertNotFalse($termsPosition);
+        $this->assertNotFalse($faqPosition);
+        $this->assertGreaterThan($termsPosition, $faqPosition);
     }
 
     public function test_admin_can_manage_faqs(): void

@@ -186,6 +186,4 @@
             </div>
         </section>
 
-        <!-- ===== FAQ / PERTANYAAN UMUM ===== -->
-        <livewire:landing-page.components.faq />
     </div>

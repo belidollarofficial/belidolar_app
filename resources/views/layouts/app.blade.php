@@ -467,6 +467,8 @@
 
             <livewire:landing-page.components.terms />
 
+            <livewire:landing-page.components.faq />
+
             <livewire:landing-page.components.testimonials />
 
             <livewire:landing-page.components.testimonial-form />

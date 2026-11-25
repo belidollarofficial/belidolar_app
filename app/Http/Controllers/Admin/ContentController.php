@@ -15,7 +15,7 @@ class ContentController extends Controller
 {
     public function index(): View
     {
-        $this->ensureTermsDefaultsExist();
+        $this->ensureContentDefaultsExist();
 
         $sections = Content::query()
             ->orderBy('sort_order')
@@ -60,21 +60,23 @@ class ContentController extends Controller
     }
 
     /**
-     * Isi default terms khusus layanan yang belum ada, tanpa menimpa
-     * teks yang sudah pernah diedit admin.
+     * Pastikan semua konten default tersedia di database. Baris yang sudah
+     * ada tidak diubah, sehingga teks yang sudah diedit admin tetap aman.
      */
-    private function ensureTermsDefaultsExist(): void
+    private function ensureContentDefaultsExist(): void
     {
-        foreach (ContentDefaults::all()['syarat_ketentuan'] ?? [] as [$key, $label, $type, $value]) {
-            Content::firstOrCreate(
-                ['section' => 'syarat_ketentuan', 'key' => $key],
-                [
-                    'label' => $label,
-                    'type' => $type,
-                    'value' => $value,
-                    'sort_order' => (int) Content::max('sort_order') + 1,
-                ],
-            );
+        foreach (ContentDefaults::all() as $section => $items) {
+            foreach ($items as [$key, $label, $type, $value]) {
+                Content::firstOrCreate(
+                    ['section' => $section, 'key' => $key],
+                    [
+                        'label' => $label,
+                        'type' => $type,
+                        'value' => $value,
+                        'sort_order' => (int) Content::max('sort_order') + 1,
+                    ],
+                );
+            }
         }
     }
 

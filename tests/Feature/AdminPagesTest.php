@@ -337,6 +337,40 @@ class AdminPagesTest extends TestCase
         $this->get(route('legal.how-to-order'))->assertOk()->assertSee('Cara Uji');
     }
 
+    public function test_admin_contents_page_creates_missing_default_content(): void
+    {
+        $this->seed(ContentSeeder::class);
+        $admin = $this->admin();
+
+        Content::query()
+            ->where(function ($query) {
+                $query->where('section', 'footer')->where('key', 'disclaimer');
+            })
+            ->orWhere(function ($query) {
+                $query->whereIn('section', ['tentang_kami', 'cara_order_page']);
+            })
+            ->delete();
+
+        $this->actingAs($admin)->get('/admin/contents')
+            ->assertOk()
+            ->assertSee('Disclaimer Footer')
+            ->assertSee('Halaman Tentang Kami')
+            ->assertSee('Halaman Cara Order');
+
+        $this->assertDatabaseHas('contents', [
+            'section' => 'footer',
+            'key' => 'disclaimer',
+        ]);
+        $this->assertDatabaseHas('contents', [
+            'section' => 'tentang_kami',
+            'key' => 'content',
+        ]);
+        $this->assertDatabaseHas('contents', [
+            'section' => 'cara_order_page',
+            'key' => 'content',
+        ]);
+    }
+
     public function test_settings_page_shows_categories(): void
     {
         $this->seed(ContentSeeder::class);

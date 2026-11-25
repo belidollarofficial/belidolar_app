@@ -75,7 +75,13 @@
                 </div>
             </div>
 
-            @php $footerDisclaimer = \App\Support\SiteContent::get('footer', 'disclaimer', ''); @endphp
+            @php
+                $footerDisclaimer = \App\Support\SiteContent::get(
+                    'footer',
+                    'disclaimer',
+                    \App\Support\ContentDefaults::value('footer', 'disclaimer')
+                );
+            @endphp
             @if (filled($footerDisclaimer))
                 <p class="text-xs text-gray-500 mt-8 max-w-4xl mx-auto leading-relaxed text-center">{{ $footerDisclaimer }}</p>
             @endif

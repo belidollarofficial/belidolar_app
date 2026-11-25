@@ -59,6 +59,20 @@ class ProductionReadinessTest extends TestCase
         $this->get('/storage/branding/missing.png')->assertNotFound();
     }
 
+    public function test_footer_disclaimer_uses_default_when_content_row_is_missing(): void
+    {
+        Content::query()
+            ->where('section', 'footer')
+            ->where('key', 'disclaimer')
+            ->delete();
+
+        SiteContent::flush();
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Disclaimer: BeliDolar merupakan');
+    }
+
     public function test_footer_links_to_legal_pages(): void
     {
         $this->seed(ContentSeeder::class);

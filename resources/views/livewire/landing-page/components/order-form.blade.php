@@ -290,6 +290,19 @@
                         </div>
                     @endif
 
+                    <label class="flex items-start gap-2.5 text-sm text-gray-300 leading-relaxed select-none">
+                        <input type="checkbox" wire:model="termsAccepted"
+                            class="mt-0.5 rounded border-[#334155] bg-[#0f1724] text-[#25d366] focus:ring-[#25d366]" />
+                        <span>
+                            Saya telah membaca dan menyetujui
+                            <a href="#syarat-ketentuan" class="text-[#22d3ee] hover:underline">
+                                Syarat dan Ketentuan {{ \App\Models\Transaction::SERVICES[$service] ?? 'layanan' }}
+                            </a>
+                            BeliDolar.id
+                        </span>
+                    </label>
+                    @error('termsAccepted') <p class="text-xs text-red-400">{{ $message }}</p> @enderror
+
                     <button type="submit" wire:loading.attr="disabled" wire:target="submit"
                             class="w-full bg-[#25d366] hover:bg-[#1da851] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition">
                         <span wire:loading.remove wire:target="submit"><i class="fab fa-whatsapp"></i> Order via WhatsApp</span>

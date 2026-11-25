@@ -240,6 +240,11 @@ class AdminPagesTest extends TestCase
             ->assertSee('2021')
             ->assertSee('Pencairan akun permanen 180 hari')
             ->assertSee('Nominal top up menggunakan USD')
+            ->assertSee(route('beranda').'?service=topup#form-order')
+            ->assertSee(route('beranda').'?service=convert_usd#form-order')
+            ->assertSee(route('beranda').'?service=invoice#form-order')
+            ->assertSee(route('beranda').'?service=pay_online#form-order')
+            ->assertSee(route('beranda').'?service=wd_akun_180#form-order')
             ->assertDontSee('1. Penerimaan Syarat')
             ->assertDontSee('Ketentuan Jasa Bayar Online');
     }
@@ -307,6 +312,29 @@ class AdminPagesTest extends TestCase
             'key' => 'invoice',
             'value' => '<p>Ketentuan invoice production.</p>',
         ]);
+    }
+
+    public function test_admin_can_edit_about_and_how_to_order_pages(): void
+    {
+        $this->seed(ContentSeeder::class);
+        $admin = $this->admin();
+
+        $this->actingAs($admin)->get('/admin/contents')
+            ->assertOk()
+            ->assertSee('Halaman Tentang Kami')
+            ->assertSee('Halaman Cara Order');
+
+        $this->actingAs($admin)->put(route('admin.contents.update'), [
+            'contents' => [
+                'tentang_kami' => ['content' => '<h2>Tentang Uji</h2><p>Isi tentang.</p>'],
+                'cara_order_page' => ['content' => '<h2>Cara Uji</h2><p>Isi cara order.</p>'],
+            ],
+        ])->assertSessionHas('success');
+
+        SiteContent::flush();
+
+        $this->get(route('legal.about'))->assertOk()->assertSee('Tentang Uji');
+        $this->get(route('legal.how-to-order'))->assertOk()->assertSee('Cara Uji');
     }
 
     public function test_settings_page_shows_categories(): void
@@ -416,7 +444,7 @@ class AdminPagesTest extends TestCase
             ->assertSee('Jenis Transaksi')
             ->assertSee('Nominal top up menggunakan USD');
 
-        $this->assertSame(1, substr_count($response->getContent(), 'contenteditable="true"'));
+        $this->assertSame(3, substr_count($response->getContent(), 'contenteditable="true"'));
 
         Livewire::test(TermsContentEditor::class)
             ->set('service', 'invoice')
@@ -456,7 +484,7 @@ class AdminPagesTest extends TestCase
             ->assertSee('Isi Syarat &amp; Ketentuan', false)
             ->assertSee('contenteditable="true"', false);
 
-        $this->assertSame(1, substr_count($response->getContent(), 'contenteditable="true"'));
+        $this->assertSame(3, substr_count($response->getContent(), 'contenteditable="true"'));
 
         Livewire::actingAs($admin)
             ->test(TermsContentEditor::class)

@@ -67,9 +67,13 @@ class ProductionReadinessTest extends TestCase
             ['section' => 'footer', 'key' => 'social_facebook_url'],
             ['label' => 'URL Profil Facebook', 'type' => 'text', 'value' => 'https://facebook.com/belidolar'],
         );
+        Content::query()->updateOrCreate(
+            ['section' => 'footer', 'key' => 'disclaimer'],
+            ['label' => 'Disclaimer Footer', 'type' => 'textarea', 'value' => 'Disclaimer uji footer.'],
+        );
         SiteContent::flush();
 
-        $this->get('/')
+        $response = $this->get('/')
             ->assertOk()
             ->assertSee(route('legal.about'))
             ->assertSee(route('legal.terms'))
@@ -78,7 +82,14 @@ class ProductionReadinessTest extends TestCase
             ->assertSee(route('beranda').'?service=wd_akun_180#form-order')
             ->assertSee('href="https://facebook.com/belidolar"', false)
             ->assertSee('aria-label="Facebook"', false)
+            ->assertSee('Disclaimer uji footer.')
             ->assertDontSee('href="#"', false);
+
+        $html = $response->getContent();
+        $this->assertLessThan(
+            strpos($html, '© 2021 Beli Dolar'),
+            strpos($html, 'Disclaimer uji footer.')
+        );
     }
 
     public function test_order_form_service_can_be_preselected_from_query_string(): void

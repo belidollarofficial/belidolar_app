@@ -75,7 +75,12 @@
                 </div>
             </div>
 
-            <div class="border-t border-[#334155] mt-8 pt-6 text-center text-sm text-gray-400">
+            @php $footerDisclaimer = \App\Support\SiteContent::get('footer', 'disclaimer', ''); @endphp
+            @if (filled($footerDisclaimer))
+                <p class="text-xs text-gray-500 mt-8 max-w-4xl mx-auto leading-relaxed text-center">{{ $footerDisclaimer }}</p>
+            @endif
+
+            <div class="border-t border-[#334155] mt-6 pt-6 text-center text-sm text-gray-400">
                 <p>@content('footer', 'copyright_lhs') <i class="fas fa-heart text-[#4f46e5]"></i> @content('footer', 'copyright_rhs')</p>
             </div>
         </div>

@@ -48,6 +48,8 @@ class OrderForm extends Component
 
     public string $notes = '';
 
+    public bool $termsAccepted = false;
+
     public string $website = '';
 
     public ?string $successCode = null;
@@ -84,6 +86,7 @@ class OrderForm extends Component
             'paymentMethod' => ['nullable', 'string', 'max:255'],
             'paymentLink' => ['nullable', 'string', 'url', 'max:500'],
             'notes' => ['nullable', 'string', 'max:1000'],
+            'termsAccepted' => ['accepted'],
             // Honeypot anti-bot: field tersembunyi yang hanya diisi bot.
             'website' => ['prohibited'],
         ];
@@ -95,6 +98,7 @@ class OrderForm extends Component
             'payoutMethodId.required' => 'Pilih bank / e-wallet tujuan pencairan.',
             'payoutMethodOther.required' => 'Nama bank / e-wallet wajib diisi.',
             'payoutAccountNumber.required' => 'Nomor rekening / e-wallet wajib diisi.',
+            'termsAccepted.accepted' => 'Centang persetujuan Syarat & Ketentuan sebelum melanjutkan.',
         ];
     }
 
@@ -368,7 +372,7 @@ class OrderForm extends Component
             'name', 'phone', 'email', 'paypalAccountName', 'accountType', 'amount',
             'bankAccountId', 'payoutMethodId', 'payoutMethodOther', 'payoutAccountNumber',
             'merchantName', 'merchantUrl', 'paymentMethod',
-            'paymentLink', 'notes', 'successCode', 'successUrl',
+            'paymentLink', 'notes', 'termsAccepted', 'successCode', 'successUrl',
         ]);
         $this->resetValidation();
     }

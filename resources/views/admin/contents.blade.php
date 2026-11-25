@@ -16,6 +16,8 @@
                 'cara_order' => 'Cara Order',
                 'testimoni' => 'Testimoni',
                 'footer' => 'Footer',
+                'tentang_kami' => 'Halaman Tentang Kami',
+                'cara_order_page' => 'Halaman Cara Order',
                 'syarat_ketentuan' => 'Syarat & Ketentuan',
             ];
         @endphp

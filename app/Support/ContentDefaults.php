@@ -95,6 +95,7 @@ class ContentDefaults
                 ['social_instagram_url', 'URL Profil Instagram', 'text', ''],
                 ['social_twitter_url', 'URL Profil X / Twitter', 'text', ''],
                 ['social_youtube_url', 'URL Profil YouTube', 'text', ''],
+                ['disclaimer', 'Disclaimer Footer', 'textarea', 'Disclaimer: BeliDolar merupakan layanan pembayaran digital independen dan tidak berafiliasi dengan PayPal, bank, atau merchant mana pun.'],
                 ['kontak_phone', 'Kontak WhatsApp', 'text', '+62 812-3456-7890'],
                 ['kontak_email', 'Kontak Email', 'text', 'cs@belidolar.id'],
                 ['kontak_hours', 'Kontak Jam', 'text', '24 Jam / 7 Hari'],
@@ -103,6 +104,49 @@ class ContentDefaults
                 ['jam_status', 'Jam Operasional - Status', 'text', 'Online 24/7'],
                 ['copyright_lhs', 'Copyright - Kiri', 'text', '© 2021 Beli Dolar. All rights reserved. Made with'],
                 ['copyright_rhs', 'Copyright - Kanan', 'text', 'in Indonesia'],
+            ],
+            'tentang_kami' => [
+                ['content', 'Isi Halaman Tentang Kami', 'wysiwyg',
+                    '<h2>Siapa Beli Dolar?</h2>'
+                    .'<p>Beli Dolar adalah layanan digital yang membantu pelanggan di Indonesia untuk melakukan top up saldo PayPal, mengonversi USD ke Rupiah, serta membayar invoice PayPal dengan proses yang cepat, mudah, dan aman. Kami hadir sebagai jembatan antara kebutuhan transaksi internasional Anda dan metode pembayaran lokal.</p>'
+                    .'<h2>Layanan Kami</h2>'
+                    .'<ul>'
+                    .'<li><strong>Top Up Saldo PayPal</strong> — isi saldo akun PayPal Anda menggunakan pembayaran Rupiah.</li>'
+                    .'<li><strong>Convert USD ke IDR</strong> — cairkan saldo USD Anda ke rekening bank atau e-wallet dengan rate kompetitif.</li>'
+                    .'<li><strong>Bayar Invoice PayPal</strong> — selesaikan tagihan invoice PayPal tanpa perlu kartu kredit internasional.</li>'
+                    .'<li><strong>Jasa Bayar Online</strong> — bantu pembayaran belanjaan di situs merchant luar negeri.</li>'
+                    .'<li><strong>WD Akun Permanen 180 Hari</strong> — layanan pencairan untuk akun permanen dengan masa aktif 180 hari.</li>'
+                    .'</ul>'
+                    .'<h2>Komitmen Kami</h2>'
+                    .'<p>Setiap transaksi ditangani secara manual oleh tim kami pada jam operasional yang telah ditentukan. Kami mengutamakan transparansi nominal, keamanan data pelanggan, dan komunikasi yang jelas melalui WhatsApp. Kepuasan serta kepercayaan pelanggan adalah prioritas utama kami.</p>'
+                    .'<h2>Hubungi Kami</h2>'
+                    .'<p>Pertanyaan, kendala transaksi, atau kerja sama dapat disampaikan melalui WhatsApp admin yang tertera di halaman utama. Kami akan merespons pada jam operasional.</p>',
+                ],
+            ],
+            'cara_order_page' => [
+                ['content', 'Isi Halaman Cara Order', 'wysiwyg',
+                    '<h2>Langkah Umum</h2>'
+                    .'<ol>'
+                    .'<li>Pilih layanan pada form order: Top Up Saldo PayPal, Convert USD ke IDR, Bayar Invoice PayPal, Jasa Bayar Online, atau WD Akun Permanen 180 Hari.</li>'
+                    .'<li>Isi nama, nomor WhatsApp aktif, dan data tambahan sesuai layanan yang dipilih.</li>'
+                    .'<li>Masukkan nominal USD bila layanan membutuhkan nominal. Estimasi Rupiah dan rate akan tampil otomatis.</li>'
+                    .'<li>Centang persetujuan Syarat dan Ketentuan, lalu tekan tombol Order via WhatsApp.</li>'
+                    .'<li>Anda akan diarahkan ke WhatsApp admin dengan ringkasan pesanan. Kirim pesan tersebut dan ikuti instruksi admin.</li>'
+                    .'</ol>'
+                    .'<h2>Detail per Layanan</h2>'
+                    .'<h3>Top Up Saldo PayPal</h3>'
+                    .'<p>Isi data akun PayPal tujuan, pilih jenis akun, dan masukkan nominal top up. Pembayaran dan konfirmasi dilakukan melalui WhatsApp admin.</p>'
+                    .'<h3>Convert USD ke IDR</h3>'
+                    .'<p>Pilih tipe pencairan bank atau e-wallet. Jika memilih Bank Lainnya atau E-Wallet Lainnya, isi nama bank/e-wallet secara manual. Rate mengikuti nominal yang berlaku.</p>'
+                    .'<h3>Bayar Invoice PayPal</h3>'
+                    .'<p>Sertakan link invoice PayPal yang akan dibayarkan. Nominal invoice dikonfirmasi oleh admin sebelum pembayaran diproses.</p>'
+                    .'<h3>Jasa Bayar Online</h3>'
+                    .'<p>Isi nama merchant, link situs belanja, nominal pembelian, dan metode pembayaran yang digunakan.</p>'
+                    .'<h3>WD Akun Permanen 180 Hari</h3>'
+                    .'<p>Isi nama lengkap, nomor WhatsApp, dan catatan bila diperlukan. Admin akan menghubungi Anda untuk verifikasi dan detail pencairan.</p>'
+                    .'<h2>Melacak Pesanan</h2>'
+                    .'<p>Gunakan kode transaksi (format ZP-YYMMDD-XXXXX) dan nomor WhatsApp yang Anda masukkan saat order pada bagian pelacakan transaksi di halaman utama untuk melihat status pesanan.</p>',
+                ],
             ],
             'syarat_ketentuan' => [
                 ['title', 'Judul', 'text', 'Syarat & Ketentuan'],

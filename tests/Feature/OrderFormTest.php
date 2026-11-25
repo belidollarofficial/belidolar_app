@@ -55,6 +55,7 @@ class OrderFormTest extends TestCase
             'payoutMethodId' => $this->payout->id,
             'payoutAccountNumber' => '1234567890',
             'notes' => 'Top up segera',
+            'termsAccepted' => true,
         ], $overrides);
     }
 
@@ -347,6 +348,7 @@ class OrderFormTest extends TestCase
                 'phone' => '081290859343',
                 'service' => 'wd_akun_180',
                 'notes' => 'Akun permanen 180 hari',
+                'termsAccepted' => true,
             ])
             ->assertSee('Catatan (Opsional)')
             ->assertDontSee('Email/Username Paypal')
@@ -514,6 +516,16 @@ class OrderFormTest extends TestCase
             ->set($this->validData(['service' => 'invoice']))
             ->call('submit')
             ->assertHasErrors('paymentLink');
+
+        $this->assertDatabaseCount('transactions', 0);
+    }
+
+    public function test_order_requires_terms_acceptance(): void
+    {
+        Livewire::test(OrderForm::class)
+            ->set($this->validData(['termsAccepted' => false]))
+            ->call('submit')
+            ->assertHasErrors('termsAccepted');
 
         $this->assertDatabaseCount('transactions', 0);
     }

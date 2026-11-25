@@ -111,41 +111,46 @@
                 <p class="text-gray-400 mt-2">@content('layanan', 'subtitle')</p>
             </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <div class="bg-[#1e293b] rounded-2xl card-shadow p-6 text-center hover:shadow-xl transition-all hover:-translate-y-1">
+                <a href="{{ route('beranda') }}?service=topup#form-order"
+                   class="group block bg-[#1e293b] rounded-2xl card-shadow p-6 text-center no-underline hover:shadow-xl transition-all hover:-translate-y-1 hover:ring-1 hover:ring-[#4f46e5]/60">
                     <div class="w-16 h-16 rounded-2xl bg-[#4f46e5]/10 flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-arrow-up text-2xl text-[#4f46e5]"></i>
                     </div>
-                    <h4 class="font-bold text-white">@content('layanan', 'item_1_title')</h4>
+                    <h4 class="font-bold text-white group-hover:text-[#a5b4fc] transition">@content('layanan', 'item_1_title')</h4>
                     <p class="text-xs text-gray-400 mt-1">@content('layanan', 'item_1_desc')</p>
-                </div>
-                <div class="bg-[#1e293b] rounded-2xl card-shadow p-6 text-center hover:shadow-xl transition-all hover:-translate-y-1">
+                </a>
+                <a href="{{ route('beranda') }}?service=convert_usd#form-order"
+                   class="group block bg-[#1e293b] rounded-2xl card-shadow p-6 text-center no-underline hover:shadow-xl transition-all hover:-translate-y-1 hover:ring-1 hover:ring-[#06b6d4]/60">
                     <div class="w-16 h-16 rounded-2xl bg-[#06b6d4]/10 flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-exchange-alt text-2xl text-[#06b6d4]"></i>
                     </div>
-                    <h4 class="font-bold text-white">@content('layanan', 'item_2_title')</h4>
+                    <h4 class="font-bold text-white group-hover:text-[#67e8f9] transition">@content('layanan', 'item_2_title')</h4>
                     <p class="text-xs text-gray-400 mt-1">@content('layanan', 'item_2_desc')</p>
-                </div>
-                <div class="bg-[#1e293b] rounded-2xl card-shadow p-6 text-center hover:shadow-xl transition-all hover:-translate-y-1">
+                </a>
+                <a href="{{ route('beranda') }}?service=invoice#form-order"
+                   class="group block bg-[#1e293b] rounded-2xl card-shadow p-6 text-center no-underline hover:shadow-xl transition-all hover:-translate-y-1 hover:ring-1 hover:ring-[#f59e0b]/60">
                     <div class="w-16 h-16 rounded-2xl bg-[#f59e0b]/10 flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-file-invoice text-2xl text-[#f59e0b]"></i>
                     </div>
-                    <h4 class="font-bold text-white">@content('layanan', 'item_3_title')</h4>
+                    <h4 class="font-bold text-white group-hover:text-[#fcd34d] transition">@content('layanan', 'item_3_title')</h4>
                     <p class="text-xs text-gray-400 mt-1">@content('layanan', 'item_3_desc')</p>
-                </div>
-                <div class="bg-[#1e293b] rounded-2xl card-shadow p-6 text-center hover:shadow-xl transition-all hover:-translate-y-1">
+                </a>
+                <a href="{{ route('beranda') }}?service=pay_online#form-order"
+                   class="group block bg-[#1e293b] rounded-2xl card-shadow p-6 text-center no-underline hover:shadow-xl transition-all hover:-translate-y-1 hover:ring-1 hover:ring-emerald-500/60">
                     <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-cart-shopping text-2xl text-emerald-400"></i>
                     </div>
-                    <h4 class="font-bold text-white">{{ \App\Support\SiteContent::get('layanan', 'item_4_title', 'Jasa Bayar Online') }}</h4>
+                    <h4 class="font-bold text-white group-hover:text-emerald-300 transition">{{ \App\Support\SiteContent::get('layanan', 'item_4_title', 'Jasa Bayar Online') }}</h4>
                     <p class="text-xs text-gray-400 mt-1">{{ \App\Support\SiteContent::get('layanan', 'item_4_desc', 'Bayar belanjaan di situs luar negeri') }}</p>
-                </div>
-                <div class="bg-[#1e293b] rounded-2xl card-shadow p-6 text-center hover:shadow-xl transition-all hover:-translate-y-1">
+                </a>
+                <a href="{{ route('beranda') }}?service=wd_akun_180#form-order"
+                   class="group block bg-[#1e293b] rounded-2xl card-shadow p-6 text-center no-underline hover:shadow-xl transition-all hover:-translate-y-1 hover:ring-1 hover:ring-rose-500/60">
                     <div class="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-clock text-2xl text-rose-400"></i>
                     </div>
-                    <h4 class="font-bold text-white">{{ \App\Support\SiteContent::get('layanan', 'item_5_title', 'WD Akun Permanen 180 Hari') }}</h4>
+                    <h4 class="font-bold text-white group-hover:text-rose-300 transition">{{ \App\Support\SiteContent::get('layanan', 'item_5_title', 'WD Akun Permanen 180 Hari') }}</h4>
                     <p class="text-xs text-gray-400 mt-1">{{ \App\Support\SiteContent::get('layanan', 'item_5_desc', 'Pencairan akun permanen 180 hari') }}</p>
-                </div>
+                </a>
             </div>
         </section>
 

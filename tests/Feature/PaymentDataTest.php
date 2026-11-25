@@ -144,6 +144,7 @@ class PaymentDataTest extends TestCase
                 'service' => 'topup',
                 'amount' => 50,
                 'bankAccountId' => $bank->id,
+                'termsAccepted' => true,
             ])
             ->call('submit')
             ->assertHasNoErrors()
